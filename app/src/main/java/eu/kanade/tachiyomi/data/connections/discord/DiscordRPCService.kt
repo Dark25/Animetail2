@@ -154,33 +154,71 @@ class DiscordRPCService : Service() {
             playerData: PlayerData,
             discordScreen: DiscordScreen,
             sinceTime: Long = since,
-
         ) {
-            val appName = context.getString(R.string.app_name) // Get app name
+            val appName = context.getString(R.string.app_name)
+            
+            // Obtener preferencias personalizadas
+            val customMessage = connectionsPreferences.discordCustomMessage().get()
+            val showProgress = connectionsPreferences.discordShowProgress().get()
+            val showTimestamp = connectionsPreferences.discordShowTimestamp().get()
+            val showButtons = connectionsPreferences.discordShowButtons().get()
+            val showDownloadButton = connectionsPreferences.discordShowDownloadButton().get()
+            val showDiscordButton = connectionsPreferences.discordShowDiscordButton().get()
+
             val name = playerData.animeTitle ?: appName
+            val details = when {
+                customMessage.isNotBlank() -> customMessage
+                playerData.animeTitle != null -> playerData.animeTitle
+                else -> context.getString(discordScreen.details)
+            }
 
-            val details = playerData.animeTitle ?: context.getString(
-                discordScreen.details,
-            )
-
-            val state = playerData.episodeNumber ?: context.getString(discordScreen.text)
+            val state = when {
+                !showProgress -> null
+                playerData.episodeNumber != null -> playerData.episodeNumber
+                else -> context.getString(discordScreen.text)
+            }
 
             val imageUrl = playerData.thumbnailUrl ?: discordScreen.imageUrl
-            val since = playerData.startTimestamp
-            val end = playerData.endTimestamp
+            
+            // Configurar timestamps según preferencia
+            val timestamps = if (showTimestamp) {
+                Activity.Timestamps(
+                    start = playerData.startTimestamp ?: since,
+                    end = playerData.endTimestamp
+                )
+            } else null
+
+            // Configurar botones predefinidos
+            val buttons = if (showButtons) {
+                buildList {
+                    if (showDownloadButton) add(DOWNLOAD_BUTTON_LABEL)
+                    if (showDiscordButton) add(DISCORD_BUTTON_LABEL)
+                }.takeIf { it.isNotEmpty() }
+            } else null
+
+            val metadata = buttons?.let {
+                Activity.Metadata(
+                    buttonUrls = buildList {
+                        if (showDownloadButton) add(DOWNLOAD_BUTTON_URL)
+                        if (showDiscordButton) add(DISCORD_BUTTON_URL)
+                    }
+                )
+            }
 
             rpc!!.updateRPC(
                 activity = Activity(
                     name = name,
                     details = details,
                     state = state,
-                    type = 3, // Assuming 3 is always the correct type
-                    timestamps = Activity.Timestamps(start = since, end = end),
+                    type = 3,
+                    timestamps = timestamps,
                     assets = Activity.Assets(
                         largeImage = "$MP_PREFIX$imageUrl",
                         smallImage = "$MP_PREFIX${DiscordScreen.APP.imageUrl}",
                         smallText = context.getString(DiscordScreen.APP.text),
                     ),
+                    buttons = buttons,
+                    metadata = metadata,
                 ),
                 since = sinceTime,
             )
@@ -201,13 +239,34 @@ class DiscordRPCService : Service() {
             readerData: ReaderData,
             discordScreen: DiscordScreen,
             sinceTime: Long = since,
-
         ) {
             val appName = context.getString(R.string.app_name)
             val name = readerData.mangaTitle ?: appName
             val details = readerData.mangaTitle ?: context.getString(discordScreen.details)
             val state = readerData.chapterNumber ?: context.getString(discordScreen.text)
             val imageUrl = readerData.thumbnailUrl ?: discordScreen.imageUrl
+
+            // Obtener preferencias de botones
+            val showButtons = connectionsPreferences.discordShowButtons().get()
+            val showDownloadButton = connectionsPreferences.discordShowDownloadButton().get()
+            val showDiscordButton = connectionsPreferences.discordShowDiscordButton().get()
+
+            // Configurar botones predefinidos
+            val buttons = if (showButtons) {
+                buildList {
+                    if (showDownloadButton) add(DOWNLOAD_BUTTON_LABEL)
+                    if (showDiscordButton) add(DISCORD_BUTTON_LABEL)
+                }.takeIf { it.isNotEmpty() }
+            } else null
+
+            val metadata = buttons?.let {
+                Activity.Metadata(
+                    buttonUrls = buildList {
+                        if (showDownloadButton) add(DOWNLOAD_BUTTON_URL)
+                        if (showDiscordButton) add(DISCORD_BUTTON_URL)
+                    }
+                )
+            }
 
             rpc!!.updateRPC(
                 activity = Activity(
@@ -221,6 +280,8 @@ class DiscordRPCService : Service() {
                         smallImage = "$MP_PREFIX${DiscordScreen.APP.imageUrl}",
                         smallText = context.getString(DiscordScreen.APP.text),
                     ),
+                    buttons = buttons,
+                    metadata = metadata,
                 ),
                 since = since,
             )
