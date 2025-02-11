@@ -182,23 +182,27 @@ class DiscordRPCService : Service() {
             val timestamps = if (showTimestamp) {
                 Activity.Timestamps(
                     start = playerData.startTimestamp ?: since,
-                    end = playerData.endTimestamp
+                    end = playerData.endTimestamp,
                 )
-            } else null
+            } else {
+                null
+            }
 
             val buttons = if (showButtons) {
                 buildList {
                     if (showDownloadButton) add(DOWNLOAD_BUTTON_LABEL)
                     if (showDiscordButton) add(DISCORD_BUTTON_LABEL)
                 }.takeIf { it.isNotEmpty() }
-            } else null
+            } else {
+                null
+            }
 
             val metadata = buttons?.let {
                 Activity.Metadata(
                     buttonUrls = buildList {
                         if (showDownloadButton) add(DOWNLOAD_BUTTON_URL)
                         if (showDiscordButton) add(DISCORD_BUTTON_URL)
-                    }
+                    },
                 )
             }
 
@@ -247,20 +251,21 @@ class DiscordRPCService : Service() {
             val showDownloadButton = connectionsPreferences.discordShowDownloadButton().get()
             val showDiscordButton = connectionsPreferences.discordShowDiscordButton().get()
 
-
             val buttons = if (showButtons) {
                 buildList {
                     if (showDownloadButton) add(DOWNLOAD_BUTTON_LABEL)
                     if (showDiscordButton) add(DISCORD_BUTTON_LABEL)
                 }.takeIf { it.isNotEmpty() }
-            } else null
+            } else {
+                null
+            }
 
             val metadata = buttons?.let {
                 Activity.Metadata(
                     buttonUrls = buildList {
                         if (showDownloadButton) add(DOWNLOAD_BUTTON_URL)
                         if (showDiscordButton) add(DISCORD_BUTTON_URL)
-                    }
+                    },
                 )
             }
 
