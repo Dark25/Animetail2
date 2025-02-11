@@ -242,4 +242,13 @@
     <string name="pref_discord_show_download_button_summary">Displays a button to download the app</string>
     <string name="pref_discord_show_discord_button">Show Discord Button</string>
     <string name="pref_discord_show_discord_button_summary">Displays a button to join the Discord server</string>
+    <!-- Cast Queue Management -->
+    <string name="cast_queue_title">Playback Queue</string>
+    <string name="action_clear_queue">Clear Queue</string>
+    <string name="cast_video_added_to_queue">Video added to queue</string>
+    <string name="cast_error_loading">Error loading video</string>
+    <string name="title_cast_quality">Select Quality</string>
+    <string name="cast_remove_from_queue">Remove from queue</string>
+    <string name="cast_move_to">Move to</string>
+
 </resources>

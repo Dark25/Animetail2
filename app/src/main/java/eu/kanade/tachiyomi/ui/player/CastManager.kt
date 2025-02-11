@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.cast.MediaLoadRequestData
+import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.MediaQueueItem
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
@@ -67,6 +68,7 @@ class CastManager(
         }
     }
 
+    // Session Management
     fun registerSessionListener() {
         sessionListener?.let { listener ->
             castContext?.sessionManager?.addSessionManagerListener(listener, CastSession::class.java)
@@ -89,6 +91,7 @@ class CastManager(
         castSession = null
     }
 
+    // Session Callbacks
     fun onSessionConnected(session: CastSession) {
         castSession = session
         updateCastState(CastState.CONNECTED)
@@ -110,22 +113,51 @@ class CastManager(
         activity.invalidateOptionsMenu()
     }
 
-    fun maintainCastSessionBackground() {
-        castSession?.remoteMediaClient?.takeIf { it.isPlaying }?.pause()
-    }
-
+    // Quality Selection
     fun handleQualitySelection() {
         viewModel.videoList.filter { it.isNotEmpty() }
             .onEach { videos ->
-                if (videos.size > 1) {
-                    activity.runOnUiThread { showQualitySelectionDialog() }
-                } else {
-                    loadRemoteMedia()
+                val hasQueueItems = (castSession?.remoteMediaClient?.mediaQueue?.itemCount ?: 0) > 0
+                val hasMultipleQualities = videos.size > 1
+
+                when {
+                    hasQueueItems || hasMultipleQualities -> activity.runOnUiThread { showQualitySelectionDialog() }
+                    else -> loadRemoteMedia()
                 }
             }
             .launchIn(viewModel.viewModelScope)
     }
 
+    // Queue Management
+    private fun getQueueItems(): List<MediaQueueItem> {
+        return castSession?.remoteMediaClient?.mediaQueue?.let { queue ->
+            (0 until queue.itemCount).mapNotNull { index ->
+                queue.getItemAtIndex(index)
+            }
+        } ?: emptyList()
+    }
+
+    private fun removeQueueItem(itemId: Int) {
+        castSession?.remoteMediaClient?.queueRemoveItem(itemId, null)
+    }
+
+    private fun moveQueueItem(itemId: Int, newIndex: Int) {
+        castSession?.remoteMediaClient?.queueMoveItemToNewIndex(itemId, newIndex, null)
+    }
+
+    private fun clearQueue() {
+        castSession?.remoteMediaClient?.let { client ->
+            client.stop()
+            client.load(
+                MediaLoadRequestData.Builder()
+                    .setMediaInfo(mediaBuilder.buildEmptyMediaInfo())
+                    .setAutoplay(false)
+                    .build(),
+            )
+        }
+    }
+
+    // Dialogs
     private fun showQualitySelectionDialog() {
         activity.runOnUiThread {
             AlertDialog.Builder(context)
@@ -136,23 +168,68 @@ class CastManager(
                 ) { dialog, which ->
                     viewModel.setVideoIndex(which)
                     dialog.dismiss()
-                    loadRemoteMediaWithState()
+                    loadRemoteMedia()
                 }
-                .setCancelable(false)
+                .setPositiveButton(context.stringResource(TLMR.strings.cast_queue_title)) { _, _ ->
+                    showQueueManagementDialog()
+                }
                 .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss() }
                 .show()
         }
     }
 
-    private fun loadRemoteMediaWithState() {
-        _castState.value = CastState.CONNECTING
-        loadRemoteMedia()
+    private fun showQueueManagementDialog() {
+        val queueItems = getQueueItems()
+        if (queueItems.isEmpty()) return
+
+        val displayItems = queueItems.map { item ->
+            val metadata = item.media?.metadata
+            val title = metadata?.getString(MediaMetadata.KEY_TITLE) ?: "Unknown"
+            val subtitle = metadata?.getString(MediaMetadata.KEY_SUBTITLE) ?: ""
+            "$title - $subtitle"
+        }.toTypedArray()
+
+        activity.runOnUiThread {
+            AlertDialog.Builder(context)
+                .setTitle(context.stringResource(TLMR.strings.cast_queue_title))
+                .setItems(displayItems) { _, which ->
+                    showQueueItemOptionsDialog(queueItems[which], which, queueItems.size)
+                }
+                .setPositiveButton(context.stringResource(TLMR.strings.action_clear_queue)) { _, _ ->
+                    clearQueue()
+                }
+                .setNeutralButton(android.R.string.cancel, null)
+                .show()
+        }
     }
 
+    private fun showQueueItemOptionsDialog(item: MediaQueueItem, currentPos: Int, queueSize: Int) {
+        val options = arrayOf(
+            context.stringResource(TLMR.strings.cast_remove_from_queue),
+            *Array(queueSize) { index -> "${context.stringResource(TLMR.strings.cast_move_to)} ${index + 1}" },
+        )
+
+        activity.runOnUiThread {
+            AlertDialog.Builder(context)
+                .setTitle(item.media?.metadata?.getString(MediaMetadata.KEY_TITLE))
+                .setItems(options) { _, which ->
+                    when (which) {
+                        0 -> removeQueueItem(item.itemId)
+                        else -> {
+                            val newPos = which - 1
+                            if (newPos != currentPos) moveQueueItem(item.itemId, newPos)
+                        }
+                    }
+                }
+                .setNeutralButton(android.R.string.cancel, null)
+                .show()
+        }
+    }
+
+    // Media Loading & Progress Tracking
     @SuppressLint("SuspiciousIndentation")
     private fun loadRemoteMedia() {
         if (!isCastApiAvailable) return
-
         val remoteMediaClient = castSession?.remoteMediaClient ?: return
 
         activity.lifecycleScope.launch {
@@ -160,10 +237,16 @@ class CastManager(
                 val selectedIndex = viewModel.selectedVideoIndex.value
                 val mediaInfo = mediaBuilder.buildMediaInfo(selectedIndex)
                 val currentLocalPosition = (player.timePos ?: 0).toLong()
-                viewModel.updateCastProgress(currentLocalPosition.toFloat())
+
+                if (remoteMediaClient.mediaQueue.itemCount == 0) {
+                    viewModel.updateCastProgress(currentLocalPosition.toFloat())
+                }
 
                 if (remoteMediaClient.mediaQueue.itemCount > 0) {
-                    remoteMediaClient.queueAppendItem(MediaQueueItem.Builder(mediaInfo).build(), null)
+                    val queueItem = MediaQueueItem.Builder(mediaInfo)
+                        .setAutoplay(autoplayEnabled)
+                        .build()
+                    remoteMediaClient.queueAppendItem(queueItem, null)
                     activity.runOnUiThread {
                         Toast.makeText(
                             context,
@@ -207,6 +290,14 @@ class CastManager(
 
     private fun getCurrentCastPosition(): Long {
         return castSession?.remoteMediaClient?.approximateStreamPosition ?: 0
+    }
+
+    fun maintainCastSessionBackground() {
+        castSession?.remoteMediaClient?.let { client ->
+            if (client.isPlaying) {
+                client.pause()
+            }
+        }
     }
 
     enum class CastState {
