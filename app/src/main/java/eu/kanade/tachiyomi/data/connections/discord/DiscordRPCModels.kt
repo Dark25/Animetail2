@@ -19,7 +19,6 @@ const val RICH_PRESENCE_TAG = "discord_rpc"
 // Constant for application id
 private const val RICH_PRESENCE_APPLICATION_ID = "1173423931865170070"
 
-
 const val DOWNLOAD_BUTTON_LABEL = "Download"
 const val DOWNLOAD_BUTTON_URL = "https://github.com/Dark25/Animetail2/releases"
 const val DISCORD_BUTTON_LABEL = "Discord"

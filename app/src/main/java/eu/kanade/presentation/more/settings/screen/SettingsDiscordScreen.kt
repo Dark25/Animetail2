@@ -92,11 +92,11 @@ object SettingsDiscordScreen : SearchableSettings {
 
         var showCustomMessageDialog by rememberSaveable { mutableStateOf(false) }
         var tempCustomMessage by rememberSaveable { mutableStateOf(customMessagePref.get()) }
-        
+
         if (showCustomMessageDialog) {
             AlertDialog(
-                onDismissRequest = { 
-                    showCustomMessageDialog = false 
+                onDismissRequest = {
+                    showCustomMessageDialog = false
                     tempCustomMessage = customMessagePref.get()
                 },
                 title = { Text(stringResource(R.string.pref_discord_custom_message)) },
@@ -110,7 +110,7 @@ object SettingsDiscordScreen : SearchableSettings {
                             singleLine = true,
                         )
                         TextButton(
-                            onClick = { 
+                            onClick = {
                                 customMessagePref.delete()
                                 tempCustomMessage = ""
                             },
@@ -122,20 +122,20 @@ object SettingsDiscordScreen : SearchableSettings {
                 },
                 confirmButton = {
                     TextButton(
-                        onClick = { 
+                        onClick = {
                             customMessagePref.set(tempCustomMessage)
-                            showCustomMessageDialog = false 
-                        }
+                            showCustomMessageDialog = false
+                        },
                     ) {
                         Text(stringResource(android.R.string.ok))
                     }
                 },
                 dismissButton = {
                     TextButton(
-                        onClick = { 
+                        onClick = {
                             showCustomMessageDialog = false
                             tempCustomMessage = customMessagePref.get()
-                        }
+                        },
                     ) {
                         Text(stringResource(android.R.string.cancel))
                     }
