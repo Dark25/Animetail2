@@ -223,7 +223,7 @@ class CastManager(
             val options = arrayOf(
                 context.stringResource(TLMR.strings.cast_remove_from_queue),
                 context.stringResource(TLMR.strings.move_to_top),
-                context.stringResource(TLMR.strings.move_to_position)
+                context.stringResource(TLMR.strings.move_to_position),
             )
 
             AlertDialog.Builder(context)
@@ -242,8 +242,8 @@ class CastManager(
 
     private fun showMoveToPositionDialog(item: MediaQueueItem, currentPos: Int) {
         val queueSize = castSession?.remoteMediaClient?.mediaQueue?.itemCount ?: return
-        val positions = Array(queueSize) { index -> 
-            "${context.stringResource(TLMR.strings.position)} ${index + 1}" 
+        val positions = Array(queueSize) { index ->
+            "${context.stringResource(TLMR.strings.position)} ${index + 1}"
         }
 
         activity.runOnUiThread {
@@ -340,7 +340,7 @@ class CastManager(
     private fun loadQueueBatch(remoteMediaClient: RemoteMediaClient) {
         val batchItems = mediaQueue.take(BATCH_SIZE).toTypedArray()
         mediaQueue.removeAll(batchItems.toSet())
-        
+
         remoteMediaClient.queueInsertItems(batchItems, MediaQueueItem.INVALID_ITEM_ID, null)
         showAddedToQueueToast()
     }
