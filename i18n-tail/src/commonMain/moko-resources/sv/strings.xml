@@ -216,17 +216,17 @@
   <string name="remove_from_queue_confirmation">Ta bort från kön?</string>
   <string name="clear_queue_confirmation">Rensa kö</string>
   <string name="clear_queue_confirmation_message">Är du säker på att du vill rensa hela kön?</string>
-  <string name="queue">Queue</string>
-  <string name="move_to_bottom">Move to Bottom</string>
-  <string name="action_end_session">End Cast Session</string>
-  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Available Devices</string>
-  <string name="cast_media_info">Media Info</string>
-  <string name="cast_previous_video">Previous Video</string>
-  <string name="cast_next_video">Next Video</string>
-  <string name="cast_play">Play</string>
-  <string name="cast_pause">Pause</string>
-  <string name="cast_rewind_30s">Rewind 30s</string>
-  <string name="cast_forward_30s">Forward 30s</string>
-  <string name="cast_volume">Volume</string>
-  <string name="cast_end_session">End Cast Session</string>
+  <string name="queue">Kö</string>
+  <string name="move_to_bottom">Flytta längst ned</string>
+  <string name="action_end_session">Avsluta Cast-sessionen</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Tillgängliga enheter</string>
+  <string name="cast_media_info">Media Information</string>
+  <string name="cast_previous_video">Föregående video</string>
+  <string name="cast_next_video">Nästa video</string>
+  <string name="cast_play">Spela</string>
+  <string name="cast_pause">Pausa</string>
+  <string name="cast_rewind_30s">Spola tillbaka 30s</string>
+  <string name="cast_forward_30s">Vidarebefordra 30s</string>
+  <string name="cast_volume">Volym</string>
+  <string name="cast_end_session">Avsluta Cast-sessionen</string>
 </resources>
