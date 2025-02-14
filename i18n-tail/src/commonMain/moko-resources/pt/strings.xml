@@ -216,17 +216,17 @@
   <string name="remove_from_queue_confirmation">Remover da Fila?</string>
   <string name="clear_queue_confirmation">Limpar fila</string>
   <string name="clear_queue_confirmation_message">Tem certeza de que deseja limpar toda a fila?</string>
-  <string name="queue">Queue</string>
-  <string name="move_to_bottom">Move to Bottom</string>
-  <string name="action_end_session">End Cast Session</string>
-  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Available Devices</string>
-  <string name="cast_media_info">Media Info</string>
-  <string name="cast_previous_video">Previous Video</string>
-  <string name="cast_next_video">Next Video</string>
-  <string name="cast_play">Play</string>
-  <string name="cast_pause">Pause</string>
-  <string name="cast_rewind_30s">Rewind 30s</string>
-  <string name="cast_forward_30s">Forward 30s</string>
+  <string name="queue">Fila</string>
+  <string name="move_to_bottom">Mover para o Inferior</string>
+  <string name="action_end_session">Encerrar Sessão de Transmissão</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dispositivos Disponíveis</string>
+  <string name="cast_media_info">Informações de mídia</string>
+  <string name="cast_previous_video">Vídeo anterior</string>
+  <string name="cast_next_video">Próximo Vídeo</string>
+  <string name="cast_play">Reproduzir</string>
+  <string name="cast_pause">Suspender</string>
+  <string name="cast_rewind_30s">Retroceder 30s</string>
+  <string name="cast_forward_30s">Avançar 30s</string>
   <string name="cast_volume">Volume</string>
-  <string name="cast_end_session">End Cast Session</string>
+  <string name="cast_end_session">Encerrar Sessão de Transmissão</string>
 </resources>
