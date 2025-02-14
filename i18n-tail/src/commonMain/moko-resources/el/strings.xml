@@ -216,17 +216,17 @@
   <string name="remove_from_queue_confirmation">Αφαίρεση από την ουρά?</string>
   <string name="clear_queue_confirmation">Εκκαθάριση Ουράς</string>
   <string name="clear_queue_confirmation_message">Είστε βέβαιοι ότι θέλετε να καθαρίσετε ολόκληρη την ουρά?</string>
-  <string name="queue">Queue</string>
-  <string name="move_to_bottom">Move to Bottom</string>
-  <string name="action_end_session">End Cast Session</string>
-  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Available Devices</string>
-  <string name="cast_media_info">Media Info</string>
-  <string name="cast_previous_video">Previous Video</string>
-  <string name="cast_next_video">Next Video</string>
-  <string name="cast_play">Play</string>
-  <string name="cast_pause">Pause</string>
-  <string name="cast_rewind_30s">Rewind 30s</string>
-  <string name="cast_forward_30s">Forward 30s</string>
-  <string name="cast_volume">Volume</string>
-  <string name="cast_end_session">End Cast Session</string>
+  <string name="queue">Ουρά</string>
+  <string name="move_to_bottom">Μετακίνηση στο κάτω μέρος</string>
+  <string name="action_end_session">Τέλος Συνεδρίας Cast</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Διαθέσιμες Συσκευές</string>
+  <string name="cast_media_info">Πληροφορίες Πολυμέσων</string>
+  <string name="cast_previous_video">Προηγούμενο Βίντεο</string>
+  <string name="cast_next_video">Επόμενο Βίντεο</string>
+  <string name="cast_play">Αναπαραγωγή</string>
+  <string name="cast_pause">Παύση</string>
+  <string name="cast_rewind_30s">Επαναφορά 30S</string>
+  <string name="cast_forward_30s">Εμπρός 30δ</string>
+  <string name="cast_volume">Όγκος</string>
+  <string name="cast_end_session">Τέλος Συνεδρίας Cast</string>
 </resources>
