@@ -216,17 +216,17 @@
   <string name="remove_from_queue_confirmation">Supprimer de la file d\'attente ?</string>
   <string name="clear_queue_confirmation">Vider la file d\'attente</string>
   <string name="clear_queue_confirmation_message">Êtes-vous sûr de vouloir effacer toute la file d\'attente ?</string>
-  <string name="queue">Queue</string>
-  <string name="move_to_bottom">Move to Bottom</string>
-  <string name="action_end_session">End Cast Session</string>
-  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Available Devices</string>
-  <string name="cast_media_info">Media Info</string>
-  <string name="cast_previous_video">Previous Video</string>
-  <string name="cast_next_video">Next Video</string>
-  <string name="cast_play">Play</string>
-  <string name="cast_pause">Pause</string>
-  <string name="cast_rewind_30s">Rewind 30s</string>
-  <string name="cast_forward_30s">Forward 30s</string>
+  <string name="queue">File d\'attente</string>
+  <string name="move_to_bottom">Déplacer vers le bas</string>
+  <string name="action_end_session">Fin de la session de diffusion</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Appareils disponibles</string>
+  <string name="cast_media_info">Informations sur le média</string>
+  <string name="cast_previous_video">Vidéo précédente</string>
+  <string name="cast_next_video">Vidéo suivante</string>
+  <string name="cast_play">Jouer</string>
+  <string name="cast_pause">Mettre en pause</string>
+  <string name="cast_rewind_30s">Revenir en arrière de 30s</string>
+  <string name="cast_forward_30s">Avancer 30 secondes</string>
   <string name="cast_volume">Volume</string>
-  <string name="cast_end_session">End Cast Session</string>
+  <string name="cast_end_session">Fin de la session de diffusion</string>
 </resources>
