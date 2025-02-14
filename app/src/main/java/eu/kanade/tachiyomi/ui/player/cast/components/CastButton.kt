@@ -21,7 +21,7 @@ fun CastButton(
     modifier: Modifier = Modifier,
 ) {
     val alpha by animateFloatAsState(
-        targetValue = if (castState == CastManager.CastState.CONNECTED) 1f else 0.7f,
+        targetValue = 1f,
         label = "cast_button_alpha",
     )
 
