@@ -216,17 +216,17 @@
   <string name="remove_from_queue_confirmation">Uit de wachtrij verwijderen?</string>
   <string name="clear_queue_confirmation">Wachtrij wissen</string>
   <string name="clear_queue_confirmation_message">Weet u zeker dat u de hele wachtrij wilt wissen?</string>
-  <string name="queue">Queue</string>
-  <string name="move_to_bottom">Move to Bottom</string>
-  <string name="action_end_session">End Cast Session</string>
-  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Available Devices</string>
-  <string name="cast_media_info">Media Info</string>
-  <string name="cast_previous_video">Previous Video</string>
-  <string name="cast_next_video">Next Video</string>
-  <string name="cast_play">Play</string>
-  <string name="cast_pause">Pause</string>
-  <string name="cast_rewind_30s">Rewind 30s</string>
-  <string name="cast_forward_30s">Forward 30s</string>
+  <string name="queue">Wachtrij</string>
+  <string name="move_to_bottom">Naar beneden verplaatsen</string>
+  <string name="action_end_session">Beëindig sessie</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Beschikbare apparaten</string>
+  <string name="cast_media_info">Media informatie</string>
+  <string name="cast_previous_video">Vorige video</string>
+  <string name="cast_next_video">Volgende video</string>
+  <string name="cast_play">Afspelen</string>
+  <string name="cast_pause">Onderbreken</string>
+  <string name="cast_rewind_30s">30s terugspoelen</string>
+  <string name="cast_forward_30s">30 seconden vooruit</string>
   <string name="cast_volume">Volume</string>
-  <string name="cast_end_session">End Cast Session</string>
+  <string name="cast_end_session">Beëindig sessie</string>
 </resources>
