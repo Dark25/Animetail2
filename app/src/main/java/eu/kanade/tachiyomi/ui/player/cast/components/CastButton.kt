@@ -18,12 +18,11 @@ import eu.kanade.tachiyomi.ui.player.CastManager
 fun CastButton(
     castState: CastManager.CastState,
     onClick: () -> Unit,
-    onLongClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val alpha by animateFloatAsState(
         targetValue = if (castState == CastManager.CastState.CONNECTED) 1f else 0.7f,
-        label = "cast_button_alpha"
+        label = "cast_button_alpha",
     )
 
     IconButton(
@@ -32,8 +31,7 @@ fun CastButton(
             .alpha(alpha)
             .combinedClickable(
                 onClick = onClick,
-                onLongClick = onLongClick
-            )
+            ),
     ) {
         Icon(
             imageVector = if (castState == CastManager.CastState.CONNECTED) {
@@ -42,7 +40,7 @@ fun CastButton(
                 Icons.Default.Cast
             },
             contentDescription = null,
-            tint = LocalContentColor.current.copy(alpha = alpha)
+            tint = LocalContentColor.current.copy(alpha = alpha),
         )
     }
 }

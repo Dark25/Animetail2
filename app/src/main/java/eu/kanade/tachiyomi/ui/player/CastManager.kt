@@ -32,7 +32,6 @@ import tachiyomi.core.common.util.system.logcat
 import tachiyomi.i18n.tail.TLMR
 import java.util.LinkedList
 
-
 class CastManager(
     private val context: Context,
     private val activity: PlayerActivity,
@@ -128,10 +127,10 @@ class CastManager(
         updateCastState(CastState.CONNECTED)
         startTrackingCastProgress()
         updateCurrentMedia()
-        
+
         // Actualizar cola inmediatamente al conectar
         updateQueueItems()
-        
+
         session.remoteMediaClient?.registerCallback(
             object : RemoteMediaClient.Callback() {
                 override fun onStatusUpdated() {
@@ -195,7 +194,7 @@ class CastManager(
 
     fun moveQueueItem(itemId: Int, newIndex: Int) {
         castSession?.remoteMediaClient?.queueMoveItemToNewIndex(itemId, newIndex, null)
-        updateQueueItems() 
+        updateQueueItems()
     }
 
     fun clearQueue() {
@@ -332,7 +331,7 @@ class CastManager(
                 startTrackingCastProgress()
                 updateQueueItems()
                 updateCurrentMedia()
-                
+
                 // Registrar callbacks nuevamente
                 castSession?.remoteMediaClient?.registerCallback(
                     object : RemoteMediaClient.Callback() {
@@ -363,14 +362,14 @@ class CastManager(
 
     fun startDeviceDiscovery() {
         if (!isCastApiAvailable) return
-        
+
         try {
             castContext?.let { castContext ->
                 // No cambiar el estado a CONNECTING si ya está conectado
                 if (_castState.value != CastState.CONNECTED) {
                     _castState.value = CastState.CONNECTING
                 }
-                
+
                 val currentSession = castContext.sessionManager?.currentCastSession
                 val selector = androidx.mediarouter.media.MediaRouteSelector.Builder()
                     .addControlCategory(androidx.mediarouter.media.MediaControlIntent.CATEGORY_LIVE_VIDEO)
@@ -378,15 +377,24 @@ class CastManager(
                     .build()
 
                 val callback = object : androidx.mediarouter.media.MediaRouter.Callback() {
-                    override fun onRouteAdded(router: androidx.mediarouter.media.MediaRouter, route: androidx.mediarouter.media.MediaRouter.RouteInfo) {
+                    override fun onRouteAdded(
+                        router: androidx.mediarouter.media.MediaRouter,
+                        route: androidx.mediarouter.media.MediaRouter.RouteInfo,
+                    ) {
                         updateDevicesList(currentSession)
                     }
 
-                    override fun onRouteRemoved(router: androidx.mediarouter.media.MediaRouter, route: androidx.mediarouter.media.MediaRouter.RouteInfo) {
+                    override fun onRouteRemoved(
+                        router: androidx.mediarouter.media.MediaRouter,
+                        route: androidx.mediarouter.media.MediaRouter.RouteInfo,
+                    ) {
                         updateDevicesList(currentSession)
                     }
 
-                    override fun onRouteChanged(router: androidx.mediarouter.media.MediaRouter, route: androidx.mediarouter.media.MediaRouter.RouteInfo) {
+                    override fun onRouteChanged(
+                        router: androidx.mediarouter.media.MediaRouter,
+                        route: androidx.mediarouter.media.MediaRouter.RouteInfo,
+                    ) {
                         updateDevicesList(currentSession)
                     }
                 }
@@ -411,11 +419,13 @@ class CastManager(
                     name = route.name ?: "Unknown Device",
                     isConnected = route.id == currentSession?.castDevice?.deviceId,
                 )
-            } else null
+            } else {
+                null
+            }
         }
-        
+
         _availableDevices.value = devices
-        
+
         // Solo actualizar el estado si:
         // 1. Hay un dispositivo conectado y no estábamos en estado CONNECTED
         // 2. No hay dispositivos y no estábamos en estado DISCONNECTED
@@ -504,10 +514,10 @@ class CastManager(
         castSession?.remoteMediaClient?.let { client ->
             val queue = client.mediaQueue
             val currentItemId = client.currentItem?.itemId ?: return@let
-            val currentIndex = (0 until queue.itemCount).find { 
-                queue.getItemAtIndex(it)?.itemId == currentItemId 
+            val currentIndex = (0 until queue.itemCount).find {
+                queue.getItemAtIndex(it)?.itemId == currentItemId
             } ?: return@let
-            
+
             if (currentIndex < queue.itemCount - 1) {
                 client.queueJumpToItem(queue.getItemAtIndex(currentIndex + 1)?.itemId ?: return@let, null)
             }
@@ -518,10 +528,10 @@ class CastManager(
         castSession?.remoteMediaClient?.let { client ->
             val queue = client.mediaQueue
             val currentItemId = client.currentItem?.itemId ?: return@let
-            val currentIndex = (0 until queue.itemCount).find { 
-                queue.getItemAtIndex(it)?.itemId == currentItemId 
+            val currentIndex = (0 until queue.itemCount).find {
+                queue.getItemAtIndex(it)?.itemId == currentItemId
             } ?: return@let
-            
+
             if (currentIndex > 0) {
                 client.queueJumpToItem(queue.getItemAtIndex(currentIndex - 1)?.itemId ?: return@let, null)
             }

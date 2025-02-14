@@ -17,7 +17,6 @@
 
 package eu.kanade.tachiyomi.ui.player.controls
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
@@ -58,7 +57,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import eu.kanade.presentation.more.settings.screen.player.custombutton.getButtons
 import eu.kanade.presentation.theme.playerRippleConfiguration
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.CastManager
 import eu.kanade.tachiyomi.ui.player.Dialogs
 import eu.kanade.tachiyomi.ui.player.Panels
@@ -67,7 +65,6 @@ import eu.kanade.tachiyomi.ui.player.PlayerUpdates
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.Sheets
 import eu.kanade.tachiyomi.ui.player.VideoAspect
-import eu.kanade.tachiyomi.ui.player.cast.components.CastButton
 import eu.kanade.tachiyomi.ui.player.cast.components.CastSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.BrightnessOverlay
 import eu.kanade.tachiyomi.ui.player.controls.components.BrightnessSlider
@@ -180,7 +177,7 @@ fun PlayerControls(
                     volumeSlider, brightnessSlider,
                     unlockControlsButton,
                     bottomRightControls, bottomLeftControls,
-                    centerControls, seekbar, playerUpdates
+                    centerControls, seekbar, playerUpdates,
                 ) = createRefs()
 
                 val hasPreviousEpisode by viewModel.hasPreviousEpisode.collectAsState()
@@ -464,6 +461,9 @@ fun PlayerControls(
                         isEpisodeOnline = isEpisodeOnline,
                         onMoreClick = { viewModel.showSheet(Sheets.More) },
                         onMoreLongClick = { viewModel.showPanel(Panels.VideoFilters) },
+                        castState = castState,
+                        onCastClick = { showCastSheet = true },
+                        isCastEnabled = { playerPreferences.enableCast().get() },
                     )
                 }
                 // Bottom right controls
@@ -543,44 +543,6 @@ fun PlayerControls(
                             MPVLib.setPropertyDouble("speed", it.toDouble())
                         },
                         onOpenSheet = viewModel::showSheet,
-                    )
-                }
-
-                // Add cast button constraint
-                val activity = LocalContext.current as PlayerActivity
-                AnimatedVisibility(
-                    visible = controlsShown && !areControlsLocked && playerPreferences.enableCast().get(),
-                    enter = if (!reduceMotion) {
-                        slideInHorizontally(playerControlsEnterAnimationSpec()) { it } +
-                            fadeIn(playerControlsEnterAnimationSpec())
-                    } else {
-                        fadeIn(playerControlsEnterAnimationSpec())
-                    },
-                    exit = if (!reduceMotion) {
-                        slideOutHorizontally(playerControlsExitAnimationSpec()) { it } +
-                            fadeOut(playerControlsExitAnimationSpec())
-                    } else {
-                        fadeOut(playerControlsExitAnimationSpec())
-                    },
-                    modifier = Modifier.constrainAs(castButton) {
-                        top.linkTo(parent.top, spacing.medium)
-                        end.linkTo(parent.end, spacing.medium)
-                    }
-                ) {
-                    CastButton(
-                        castState = castState,
-                        onClick = { showCastSheet = true },
-                        onLongClick = {
-                            if (castState == CastManager.CastState.CONNECTED) {
-                                castManager.handleQualitySelection()
-                            } else {
-                                Toast.makeText(
-                                    activity,
-                                    activity.getString(R.string.cast_not_connected),
-                                    Toast.LENGTH_SHORT,
-                                ).show()
-                            }
-                        }
                     )
                 }
             }
@@ -677,7 +639,7 @@ fun PlayerControls(
         CastSheet(
             castManager = castManager,
             viewModel = viewModel,
-            onDismissRequest = { showCastSheet = false }
+            onDismissRequest = { showCastSheet = false },
         )
     }
 }

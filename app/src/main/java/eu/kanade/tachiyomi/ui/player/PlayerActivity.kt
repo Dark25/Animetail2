@@ -290,7 +290,7 @@ class PlayerActivity : BaseActivity() {
                                 boundsInWindow.bottom.toInt(),
                             )
                         }
-                    }
+                    },
                 )
             }
         }

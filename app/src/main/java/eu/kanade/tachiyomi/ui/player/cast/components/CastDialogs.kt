@@ -37,7 +37,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 fun CastQualityDialog(
     viewModel: PlayerViewModel,
     castManager: CastManager,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     TachiyomiTheme {
         AlertDialog(
@@ -55,7 +55,7 @@ fun CastQualityDialog(
                                 viewModel.setVideoIndex(index)
                                 castManager.loadRemoteMedia()
                                 onDismiss()
-                            }
+                            },
                         )
                     }
                 }
@@ -64,7 +64,7 @@ fun CastQualityDialog(
                 TextButton(onClick = onDismiss) {
                     Text(text = LocalContext.current.getString(android.R.string.cancel))
                 }
-            }
+            },
         )
     }
 }
@@ -80,16 +80,16 @@ private fun QualityListItem(
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
             text = quality,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
         )
         if (isSelected) {
             Icon(
                 imageVector = Icons.Default.Check,
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }
@@ -98,46 +98,47 @@ private fun QualityListItem(
 @Composable
 fun QueueItemRow(
     item: MediaQueueItem,
-    castManager: CastManager
+    castManager: CastManager,
 ) {
     val metadata = item.media?.metadata
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp), // Padding reducido
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Column(modifier = Modifier.weight(1f)) { // Usa weight para el texto
+        Column(modifier = Modifier.weight(1f)) {
+            // Usa weight para el texto
             Text(
                 text = metadata?.getString(MediaMetadata.KEY_TITLE) ?: "Unknown",
                 style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1 // Limita a una línea
+                maxLines = 1, // Limita a una línea
             )
             Text(
                 text = metadata?.getString(MediaMetadata.KEY_SUBTITLE) ?: "",
                 style = MaterialTheme.typography.bodySmall,
-                maxLines = 1 // Limita a una línea
+                maxLines = 1, // Limita a una línea
             )
         }
         Row(
             horizontalArrangement = Arrangement.End,
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(start = 8.dp),
         ) {
             IconButton(
                 onClick = { castManager.moveQueueItem(item.itemId, 0) },
-                modifier = Modifier.size(32.dp) // Botones más pequeños
+                modifier = Modifier.size(32.dp), // Botones más pequeños
             ) {
                 Icon(Icons.Default.KeyboardArrowUp, "Move to top", Modifier.size(20.dp))
             }
             IconButton(
                 onClick = { castManager.moveQueueItem(item.itemId, Int.MAX_VALUE) },
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(32.dp),
             ) {
                 Icon(Icons.Default.KeyboardArrowDown, "Move to bottom", Modifier.size(20.dp))
             }
             IconButton(
                 onClick = { castManager.removeQueueItem(item.itemId) },
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(32.dp),
             ) {
                 Icon(Icons.Default.Close, "Remove", Modifier.size(20.dp))
             }

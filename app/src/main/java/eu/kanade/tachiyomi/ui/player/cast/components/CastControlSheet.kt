@@ -46,13 +46,13 @@ fun CastControlSheet(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         // Current media info
         ListItem(
             headlineContent = { Text(viewModel.mediaTitle.value) },
             leadingContent = { Icon(Icons.Default.PlayArrow, null) },
-            modifier = Modifier.clickable { showPlayerDialog = true }
+            modifier = Modifier.clickable { showPlayerDialog = true },
         )
 
         Divider()
@@ -75,13 +75,13 @@ fun CastControlSheet(
             Text(
                 text = stringResource(TLMR.strings.queue),
                 style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier.padding(vertical = 8.dp),
             )
             LazyColumn {
                 items(queueItems) { item ->
                     QueueItemRow(
                         item = item,
-                        castManager = castManager
+                        castManager = castManager,
                     )
                 }
             }
@@ -93,14 +93,14 @@ fun CastControlSheet(
         CastQualityDialog(
             viewModel = viewModel,
             castManager = castManager,
-            onDismiss = { showQualityDialog = false }
+            onDismiss = { showQualityDialog = false },
         )
     }
 
     if (showPlayerDialog) {
         CastPlayerDialog(
             castManager = castManager,
-            onDismiss = { showPlayerDialog = false }
+            onDismiss = { showPlayerDialog = false },
         )
     }
 }

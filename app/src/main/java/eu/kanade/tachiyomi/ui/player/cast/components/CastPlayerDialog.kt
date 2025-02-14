@@ -46,7 +46,7 @@ fun CastPlayerDialog(
     val isPlaying = castManager.isPlaying.collectAsState()
     val volume = castManager.volume.collectAsState()
     val orientation = LocalConfiguration.current.orientation
-    
+
     TachiyomiTheme {
         AlertDialog(
             onDismissRequest = onDismiss,
@@ -54,7 +54,7 @@ fun CastPlayerDialog(
             text = {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     // Mostrar imagen solo en vertical
                     if (orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -62,28 +62,28 @@ fun CastPlayerDialog(
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(200.dp)
+                                    .height(200.dp),
                             ) {
                                 AsyncImage(
                                     model = mediaInfo.value?.thumbnail,
                                     contentDescription = null,
                                     contentScale = ContentScale.Fit,
-                                    modifier = Modifier.fillMaxSize()
+                                    modifier = Modifier.fillMaxSize(),
                                 )
                             }
                         }
                     }
-                    
+
                     // Subtítulo
                     Text(
                         text = mediaInfo.value?.subtitle ?: "",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
 
                     // Controles de reproducción
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
                         IconButton(onClick = { castManager.previousVideo() }) {
                             Icon(Icons.Default.SkipPrevious, "Previous video")
@@ -97,7 +97,7 @@ fun CastPlayerDialog(
                         IconButton(onClick = { castManager.playPause() }) {
                             Icon(
                                 if (isPlaying.value) Icons.Default.Pause else Icons.Default.PlayArrow,
-                                if (isPlaying.value) "Pause" else "Play"
+                                if (isPlaying.value) "Pause" else "Play",
                             )
                         }
                         IconButton(onClick = { castManager.seekRelative(30) }) {
@@ -113,7 +113,7 @@ fun CastPlayerDialog(
                         Text(
                             text = "Volume: ${(volume.value * 100).toInt()}%",
                             style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(horizontal = 16.dp)
+                            modifier = Modifier.padding(horizontal = 16.dp),
                         )
                         Slider(
                             value = volume.value,
@@ -121,7 +121,7 @@ fun CastPlayerDialog(
                             valueRange = 0f..1f,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
+                                .padding(horizontal = 16.dp),
                         )
                     }
                 }
@@ -133,24 +133,24 @@ fun CastPlayerDialog(
             },
             dismissButton = {
                 TextButton(
-                    onClick = { 
+                    onClick = {
                         castManager.endSession()
                         onDismiss()
-                    }
+                    },
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
                             Icons.AutoMirrored.Filled.ExitToApp,
                             contentDescription = "End session",
-                            modifier = Modifier.padding(end = 8.dp)
+                            modifier = Modifier.padding(end = 8.dp),
                         )
                         Text("End Cast Session")
                     }
                 }
-            }
+            },
         )
     }
 }

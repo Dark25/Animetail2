@@ -43,7 +43,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 fun CastSheet(
     castManager: CastManager,
     viewModel: PlayerViewModel,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     val devices by castManager.availableDevices.collectAsState()
     val castState by castManager.castState.collectAsState()
@@ -66,31 +66,34 @@ fun CastSheet(
     }
 
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
     ) {
         TachiyomiTheme {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(16.dp),
             ) {
                 // Dispositivos disponibles
                 Text(
                     text = "Available devices",
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp),
                 )
                 LazyColumn(
-                    modifier = Modifier.height(120.dp) // Altura más reducida para dispositivos
+                    modifier = Modifier.height(120.dp), // Altura más reducida para dispositivos
                 ) {
                     items(devices) { device ->
                         ListItem(
                             headlineContent = { Text(device.name) },
                             leadingContent = {
                                 Icon(
-                                    if (device.isConnected) Icons.Default.CastConnected
-                                    else Icons.Default.Cast,
-                                    contentDescription = null
+                                    if (device.isConnected) {
+                                        Icons.Default.CastConnected
+                                    } else {
+                                        Icons.Default.Cast
+                                    },
+                                    contentDescription = null,
                                 )
                             },
                             trailingContent = {
@@ -104,7 +107,7 @@ fun CastSheet(
                                 } else {
                                     castManager.connectToDevice(device.id)
                                 }
-                            }
+                            },
                         )
                     }
                 }
@@ -115,19 +118,19 @@ fun CastSheet(
                     // Botones más compactos
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp) // Menos espacio entre botones
+                        horizontalArrangement = Arrangement.spacedBy(8.dp), // Menos espacio entre botones
                     ) {
                         FilledTonalButton(
                             onClick = { showQualityDialog = true },
                             modifier = Modifier.weight(1f),
-                            contentPadding = PaddingValues(vertical = 8.dp) // Botones más pequeños verticalmente
+                            contentPadding = PaddingValues(vertical = 8.dp), // Botones más pequeños verticalmente
                         ) {
                             Text(stringResource(TLMR.strings.title_cast_quality))
                         }
                         FilledTonalButton(
                             onClick = { showPlayerDialog = true },
                             modifier = Modifier.weight(1f),
-                            contentPadding = PaddingValues(vertical = 8.dp)
+                            contentPadding = PaddingValues(vertical = 8.dp),
                         ) {
                             Text("Media Info")
                         }
@@ -139,11 +142,11 @@ fun CastSheet(
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = stringResource(TLMR.strings.queue),
-                            style = MaterialTheme.typography.titleSmall
+                            style = MaterialTheme.typography.titleSmall,
                         )
                         LazyColumn(
                             modifier = Modifier.height(120.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
                             items(queueItems) { item ->
                                 QueueItemRow(item = item, castManager = castManager)
@@ -161,13 +164,13 @@ fun CastSheet(
             CastQualityDialog(
                 viewModel = viewModel,
                 castManager = castManager,
-                onDismiss = { showQualityDialog = false }
+                onDismiss = { showQualityDialog = false },
             )
         }
         if (showPlayerDialog) {
             CastPlayerDialog(
                 castManager = castManager,
-                onDismiss = { showPlayerDialog = false }
+                onDismiss = { showPlayerDialog = false },
             )
         }
     }
@@ -179,7 +182,7 @@ private fun DeviceList(
     onDeviceClick: (CastManager.CastDevice) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         items(devices) { device ->
             DeviceItem(device = device, onClick = { onDeviceClick(device) })
@@ -190,16 +193,16 @@ private fun DeviceList(
 @Composable
 private fun DeviceItem(
     device: CastManager.CastDevice,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     ListItem(
         headlineContent = { Text(device.name) },
         leadingContent = {
             Icon(
                 if (device.isConnected) Icons.Default.CastConnected else Icons.Default.Cast,
-                contentDescription = null
+                contentDescription = null,
             )
         },
-        modifier = Modifier.clickable(onClick = onClick)
+        modifier = Modifier.clickable(onClick = onClick),
     )
 }
