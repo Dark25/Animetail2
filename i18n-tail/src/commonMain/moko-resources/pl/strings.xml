@@ -218,17 +218,17 @@
   <string name="remove_from_queue_confirmation">Usunąć z kolejki?</string>
   <string name="clear_queue_confirmation">Wyczyść kolejkę</string>
   <string name="clear_queue_confirmation_message">Czy na pewno chcesz wyczyścić całą kolejkę?</string>
-  <string name="queue">Queue</string>
-  <string name="move_to_bottom">Move to Bottom</string>
-  <string name="action_end_session">End Cast Session</string>
-  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Available Devices</string>
-  <string name="cast_media_info">Media Info</string>
-  <string name="cast_previous_video">Previous Video</string>
-  <string name="cast_next_video">Next Video</string>
-  <string name="cast_play">Play</string>
-  <string name="cast_pause">Pause</string>
-  <string name="cast_rewind_30s">Rewind 30s</string>
-  <string name="cast_forward_30s">Forward 30s</string>
-  <string name="cast_volume">Volume</string>
-  <string name="cast_end_session">End Cast Session</string>
+  <string name="queue">Kolejka</string>
+  <string name="move_to_bottom">Przenieś na dół</string>
+  <string name="action_end_session">Zakończ sesję Obsady</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dostępne urządzenia</string>
+  <string name="cast_media_info">Informacje o mediach</string>
+  <string name="cast_previous_video">Poprzedni film</string>
+  <string name="cast_next_video">Następne wideo</string>
+  <string name="cast_play">Odtwórz</string>
+  <string name="cast_pause">Wstrzymaj</string>
+  <string name="cast_rewind_30s">Przewiń 30s</string>
+  <string name="cast_forward_30s">Do przodu 30s</string>
+  <string name="cast_volume">Objętość</string>
+  <string name="cast_end_session">Zakończ sesję Obsady</string>
 </resources>
