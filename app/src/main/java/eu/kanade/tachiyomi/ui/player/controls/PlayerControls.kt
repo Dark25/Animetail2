@@ -67,6 +67,8 @@ import eu.kanade.tachiyomi.ui.player.PlayerUpdates
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.Sheets
 import eu.kanade.tachiyomi.ui.player.VideoAspect
+import eu.kanade.tachiyomi.ui.player.cast.components.CastButton
+import eu.kanade.tachiyomi.ui.player.cast.components.CastSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.BrightnessOverlay
 import eu.kanade.tachiyomi.ui.player.controls.components.BrightnessSlider
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
@@ -94,9 +96,13 @@ val LocalPlayerButtonsClickEvent = staticCompositionLocalOf { {} }
 @Composable
 fun PlayerControls(
     viewModel: PlayerViewModel,
+    castManager: CastManager,
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showCastSheet by remember { mutableStateOf(false) }
+    val castState by castManager.castState.collectAsState()
+
     val spacing = MaterialTheme.padding
     val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
     val gesturePreferences = remember { Injekt.get<GesturePreferences>() }
@@ -169,13 +175,13 @@ fun PlayerControls(
                     )
                     .padding(horizontal = MaterialTheme.padding.medium),
             ) {
-                val (topLeftControls, topRightControls) = createRefs()
-                val (volumeSlider, brightnessSlider) = createRefs()
-                val unlockControlsButton = createRef()
-                val (bottomRightControls, bottomLeftControls) = createRefs()
-                val centerControls = createRef()
-                val seekbar = createRef()
-                val (playerUpdates) = createRefs()
+                val (
+                    topLeftControls, topRightControls, castButton,
+                    volumeSlider, brightnessSlider,
+                    unlockControlsButton,
+                    bottomRightControls, bottomLeftControls,
+                    centerControls, seekbar, playerUpdates
+                ) = createRefs()
 
                 val hasPreviousEpisode by viewModel.hasPreviousEpisode.collectAsState()
                 val hasNextEpisode by viewModel.hasNextEpisode.collectAsState()
@@ -458,18 +464,6 @@ fun PlayerControls(
                         isEpisodeOnline = isEpisodeOnline,
                         onMoreClick = { viewModel.showSheet(Sheets.More) },
                         onMoreLongClick = { viewModel.showPanel(Panels.VideoFilters) },
-                        isCastEnabled = { playerPreferences.enableCast().get() },
-                        onCastLongClick = {
-                            if (activity.castManager.castState.value == CastManager.CastState.CONNECTED) {
-                                activity.castManager.handleQualitySelection()
-                            } else {
-                                Toast.makeText(
-                                    activity,
-                                    activity.getString(R.string.cast_not_connected),
-                                    Toast.LENGTH_SHORT,
-                                ).show()
-                            }
-                        },
                     )
                 }
                 // Bottom right controls
@@ -549,6 +543,44 @@ fun PlayerControls(
                             MPVLib.setPropertyDouble("speed", it.toDouble())
                         },
                         onOpenSheet = viewModel::showSheet,
+                    )
+                }
+
+                // Add cast button constraint
+                val activity = LocalContext.current as PlayerActivity
+                AnimatedVisibility(
+                    visible = controlsShown && !areControlsLocked && playerPreferences.enableCast().get(),
+                    enter = if (!reduceMotion) {
+                        slideInHorizontally(playerControlsEnterAnimationSpec()) { it } +
+                            fadeIn(playerControlsEnterAnimationSpec())
+                    } else {
+                        fadeIn(playerControlsEnterAnimationSpec())
+                    },
+                    exit = if (!reduceMotion) {
+                        slideOutHorizontally(playerControlsExitAnimationSpec()) { it } +
+                            fadeOut(playerControlsExitAnimationSpec())
+                    } else {
+                        fadeOut(playerControlsExitAnimationSpec())
+                    },
+                    modifier = Modifier.constrainAs(castButton) {
+                        top.linkTo(parent.top, spacing.medium)
+                        end.linkTo(parent.end, spacing.medium)
+                    }
+                ) {
+                    CastButton(
+                        castState = castState,
+                        onClick = { showCastSheet = true },
+                        onLongClick = {
+                            if (castState == CastManager.CastState.CONNECTED) {
+                                castManager.handleQualitySelection()
+                            } else {
+                                Toast.makeText(
+                                    activity,
+                                    activity.getString(R.string.cast_not_connected),
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                            }
+                        }
                     )
                 }
             }
@@ -638,6 +670,14 @@ fun PlayerControls(
 
         BrightnessOverlay(
             brightness = currentBrightness,
+        )
+    }
+
+    if (showCastSheet) {
+        CastSheet(
+            castManager = castManager,
+            viewModel = viewModel,
+            onDismissRequest = { showCastSheet = false }
         )
     }
 }
