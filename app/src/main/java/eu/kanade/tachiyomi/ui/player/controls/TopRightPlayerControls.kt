@@ -62,7 +62,7 @@ fun TopRightPlayerControls(
     // cast
     castState: CastManager.CastState,
     onCastClick: () -> Unit,
-    isCastEnabled: Boolean,
+    isCastEnabled: () -> Boolean,
 
     modifier: Modifier = Modifier,
 ) {
@@ -78,7 +78,7 @@ fun TopRightPlayerControls(
                 .padding(vertical = MaterialTheme.padding.medium, horizontal = MaterialTheme.padding.mediumSmall)
                 .size(width = 48.dp, height = 24.dp),
         )
-        if (isCastEnabled) {
+        if (isCastEnabled()) {
             CastButton(
                 castState = castState,
                 onClick = onCastClick,
