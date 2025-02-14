@@ -216,4 +216,17 @@
   <string name="remove_from_queue_confirmation">Rimuovere dalla coda?</string>
   <string name="clear_queue_confirmation">Cancella Coda</string>
   <string name="clear_queue_confirmation_message">Sei sicuro di voler cancellare l\'intera coda?</string>
+  <string name="queue">Coda</string>
+  <string name="move_to_bottom">Sposta in basso</string>
+  <string name="action_end_session">Termina Sessione Cast</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dispositivi Disponibili</string>
+  <string name="cast_media_info">Informazioni Sul Media</string>
+  <string name="cast_previous_video">Video Precedente</string>
+  <string name="cast_next_video">Video Successivo</string>
+  <string name="cast_play">Gioca</string>
+  <string name="cast_pause">Pausa</string>
+  <string name="cast_rewind_30s">Riavvolgi 30s</string>
+  <string name="cast_forward_30s">Inoltra 30s</string>
+  <string name="cast_volume">Volume</string>
+  <string name="cast_end_session">Termina Sessione Cast</string>
 </resources>

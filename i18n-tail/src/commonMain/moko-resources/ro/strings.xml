@@ -217,4 +217,17 @@
   <string name="remove_from_queue_confirmation">Eliminați din coadă?</string>
   <string name="clear_queue_confirmation">Șterge coada</string>
   <string name="clear_queue_confirmation_message">Sunteţi sigur că doriţi să ştergeţi întreaga listă?</string>
+  <string name="queue">Coadă</string>
+  <string name="move_to_bottom">Mută în jos</string>
+  <string name="action_end_session">Sfârșit sesiunea în distribuție</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dispozitive disponibile</string>
+  <string name="cast_media_info">Informații media</string>
+  <string name="cast_previous_video">Videoclip anterior</string>
+  <string name="cast_next_video">Următorul videoclip</string>
+  <string name="cast_play">Redare</string>
+  <string name="cast_pause">Întrerupeți</string>
+  <string name="cast_rewind_30s">Rulează 30 de ani</string>
+  <string name="cast_forward_30s">Redirecționare 30s</string>
+  <string name="cast_volume">Volum</string>
+  <string name="cast_end_session">Sfârșit sesiunea în distribuție</string>
 </resources>

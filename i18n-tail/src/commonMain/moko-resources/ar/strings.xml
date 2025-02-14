@@ -220,4 +220,17 @@
   <string name="remove_from_queue_confirmation">إزالة من قائمة الانتظار؟</string>
   <string name="clear_queue_confirmation">مسح قائمة الانتظار</string>
   <string name="clear_queue_confirmation_message">هل أنت متأكد من أنك تريد مسح قائمة الانتظار بأكملها؟</string>
+  <string name="queue">قائمة الانتظار</string>
+  <string name="move_to_bottom">الانتقال إلى الأسفل</string>
+  <string name="action_end_session">إنهاء الجلسة المسماة</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">الأجهزة المتاحة</string>
+  <string name="cast_media_info">معلومات الوسائط</string>
+  <string name="cast_previous_video">الفيديو السابق</string>
+  <string name="cast_next_video">الفيديو التالي</string>
+  <string name="cast_play">تشغيل</string>
+  <string name="cast_pause">إيقاف</string>
+  <string name="cast_rewind_30s">إرجاع 30 ثانية</string>
+  <string name="cast_forward_30s">إعادة توجيه 30 ثانية</string>
+  <string name="cast_volume">حجم</string>
+  <string name="cast_end_session">إنهاء الجلسة المسماة</string>
 </resources>

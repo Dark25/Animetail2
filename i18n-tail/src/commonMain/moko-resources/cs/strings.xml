@@ -218,4 +218,17 @@
   <string name="remove_from_queue_confirmation">Odstranit z fronty?</string>
   <string name="clear_queue_confirmation">Vymazat frontu</string>
   <string name="clear_queue_confirmation_message">Jste si jisti, že chcete vymazat celou frontu?</string>
+  <string name="queue">Fronta</string>
+  <string name="move_to_bottom">Přesunout dolů</string>
+  <string name="action_end_session">Ukončit relaci</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dostupná zařízení</string>
+  <string name="cast_media_info">Informace o médiích</string>
+  <string name="cast_previous_video">Předchozí video</string>
+  <string name="cast_next_video">Další video</string>
+  <string name="cast_play">Hrát</string>
+  <string name="cast_pause">Pozastavit</string>
+  <string name="cast_rewind_30s">Převrátit 30 s</string>
+  <string name="cast_forward_30s">Přeposlat 30 s</string>
+  <string name="cast_volume">Objem</string>
+  <string name="cast_end_session">Ukončit relaci</string>
 </resources>

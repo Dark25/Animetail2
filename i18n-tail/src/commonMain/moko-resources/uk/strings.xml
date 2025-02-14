@@ -218,4 +218,17 @@
   <string name="remove_from_queue_confirmation">Видалити з черги?</string>
   <string name="clear_queue_confirmation">Очистити чергу</string>
   <string name="clear_queue_confirmation_message">Ви впевнені, що хочете очистити всю чергу?</string>
+  <string name="queue">Черга</string>
+  <string name="move_to_bottom">Донизу</string>
+  <string name="action_end_session">Кінцева сесія</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Доступні пристрої</string>
+  <string name="cast_media_info">Інформація про медіа</string>
+  <string name="cast_previous_video">Попереднє відео</string>
+  <string name="cast_next_video">Наступне відео</string>
+  <string name="cast_play">Відтворити</string>
+  <string name="cast_pause">Пауза</string>
+  <string name="cast_rewind_30s">Перемотати 30-ті роки</string>
+  <string name="cast_forward_30s">Переслати 30-ті</string>
+  <string name="cast_volume">Об\'єм</string>
+  <string name="cast_end_session">Кінцева сесія</string>
 </resources>

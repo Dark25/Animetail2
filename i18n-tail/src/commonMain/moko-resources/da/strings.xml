@@ -216,4 +216,17 @@
   <string name="remove_from_queue_confirmation">Fjern fra køen?</string>
   <string name="clear_queue_confirmation">Ryd Kø</string>
   <string name="clear_queue_confirmation_message">Er du sikker på, at du vil rydde hele køen?</string>
+  <string name="queue">Kø</string>
+  <string name="move_to_bottom">Flyt til bunden</string>
+  <string name="action_end_session">Afslut Cast Session</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Tilgængelige Enheder</string>
+  <string name="cast_media_info">Medie Info</string>
+  <string name="cast_previous_video">Forrige Video</string>
+  <string name="cast_next_video">Næste Video</string>
+  <string name="cast_play">Afspil</string>
+  <string name="cast_pause">Pause</string>
+  <string name="cast_rewind_30s">Genvind 30s</string>
+  <string name="cast_forward_30s">Fremad 30s</string>
+  <string name="cast_volume">Lydstyrke</string>
+  <string name="cast_end_session">Afslut Cast Session</string>
 </resources>

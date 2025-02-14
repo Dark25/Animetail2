@@ -215,4 +215,17 @@
   <string name="remove_from_queue_confirmation">キューから削除しますか？</string>
   <string name="clear_queue_confirmation">キューをクリア</string>
   <string name="clear_queue_confirmation_message">キュー全体をクリアしてもよろしいですか？</string>
+  <string name="queue">キュー</string>
+  <string name="move_to_bottom">一番下に移動</string>
+  <string name="action_end_session">キャストセッションを終了</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">利用可能なデバイス</string>
+  <string name="cast_media_info">メディア情報</string>
+  <string name="cast_previous_video">前のビデオ</string>
+  <string name="cast_next_video">次のビデオ</string>
+  <string name="cast_play">再生</string>
+  <string name="cast_pause">一時停止</string>
+  <string name="cast_rewind_30s">30秒巻き戻し</string>
+  <string name="cast_forward_30s">30秒前</string>
+  <string name="cast_volume">音量</string>
+  <string name="cast_end_session">キャストセッションを終了</string>
 </resources>

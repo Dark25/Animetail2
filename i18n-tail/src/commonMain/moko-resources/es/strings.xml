@@ -216,4 +216,17 @@
   <string name="remove_from_queue_confirmation">¿Quitar de la cola?</string>
   <string name="clear_queue_confirmation">Vaciar Cola</string>
   <string name="clear_queue_confirmation_message">¿Estás seguro de que quieres vaciar toda la cola?</string>
+  <string name="queue">Cola de Reproducción</string>
+  <string name="move_to_bottom">Mover hacia abajo</string>
+  <string name="action_end_session">Finalizar Sesión Cast</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dispositivos Disponibles</string>
+  <string name="cast_media_info">Media info</string>
+  <string name="cast_previous_video">Video Anterior</string>
+  <string name="cast_next_video">Siguiente Video</string>
+  <string name="cast_play">Reproducir</string>
+  <string name="cast_pause">Pausar</string>
+  <string name="cast_rewind_30s">Rebobinar 30s</string>
+  <string name="cast_forward_30s">Avanzar 30s</string>
+  <string name="cast_volume">Volumen</string>
+  <string name="cast_end_session">Finalizar Sesión Cast</string>
 </resources>

@@ -216,4 +216,17 @@
   <string name="remove_from_queue_confirmation">Aus der Warteschlange entfernen?</string>
   <string name="clear_queue_confirmation">Warteschlange leeren</string>
   <string name="clear_queue_confirmation_message">Sind Sie sicher, dass Sie die gesamte Warteschlange löschen möchten?</string>
+  <string name="queue">Warteschlange</string>
+  <string name="move_to_bottom">Nach unten verschieben</string>
+  <string name="action_end_session">Sitzung beenden</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Verfügbare Geräte</string>
+  <string name="cast_media_info">Medien-Info</string>
+  <string name="cast_previous_video">Vorheriges Video</string>
+  <string name="cast_next_video">Nächstes Video</string>
+  <string name="cast_play">Abspielen</string>
+  <string name="cast_pause">Pause</string>
+  <string name="cast_rewind_30s">30 Sekunden zurückziehen</string>
+  <string name="cast_forward_30s">30s weiterleiten</string>
+  <string name="cast_volume">Lautstärke</string>
+  <string name="cast_end_session">Sitzung beenden</string>
 </resources>

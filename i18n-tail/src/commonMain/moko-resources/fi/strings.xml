@@ -216,4 +216,17 @@
   <string name="remove_from_queue_confirmation">Poistetaanko jonosta?</string>
   <string name="clear_queue_confirmation">Tyhjennä Jono</string>
   <string name="clear_queue_confirmation_message">Oletko varma, että haluat tyhjentää koko jonon?</string>
+  <string name="queue">Jono</string>
+  <string name="move_to_bottom">Siirrä alimmaksi</string>
+  <string name="action_end_session">Lopeta Cast Istunto</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Käytettävissä Olevat Laitteet</string>
+  <string name="cast_media_info">Median Tiedot</string>
+  <string name="cast_previous_video">Edellinen Video</string>
+  <string name="cast_next_video">Seuraava Video</string>
+  <string name="cast_play">Toista</string>
+  <string name="cast_pause">Tauko</string>
+  <string name="cast_rewind_30s">Rewind 30s</string>
+  <string name="cast_forward_30s">Eteenpäin 30s</string>
+  <string name="cast_volume">Tilavuus</string>
+  <string name="cast_end_session">Lopeta Cast Istunto</string>
 </resources>
