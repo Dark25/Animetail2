@@ -218,17 +218,17 @@
   <string name="remove_from_queue_confirmation">Удалить из очереди?</string>
   <string name="clear_queue_confirmation">Очистить очередь</string>
   <string name="clear_queue_confirmation_message">Вы уверены, что хотите очистить всю очередь?</string>
-  <string name="queue">Queue</string>
-  <string name="move_to_bottom">Move to Bottom</string>
-  <string name="action_end_session">End Cast Session</string>
-  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Available Devices</string>
-  <string name="cast_media_info">Media Info</string>
-  <string name="cast_previous_video">Previous Video</string>
-  <string name="cast_next_video">Next Video</string>
-  <string name="cast_play">Play</string>
-  <string name="cast_pause">Pause</string>
-  <string name="cast_rewind_30s">Rewind 30s</string>
-  <string name="cast_forward_30s">Forward 30s</string>
-  <string name="cast_volume">Volume</string>
-  <string name="cast_end_session">End Cast Session</string>
+  <string name="queue">Очередь</string>
+  <string name="move_to_bottom">Переместить вниз</string>
+  <string name="action_end_session">Завершение сеанса</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Доступные устройства</string>
+  <string name="cast_media_info">Информация о медиа</string>
+  <string name="cast_previous_video">Предыдущее видео</string>
+  <string name="cast_next_video">Следующее видео</string>
+  <string name="cast_play">Играть</string>
+  <string name="cast_pause">Пауза</string>
+  <string name="cast_rewind_30s">Перемотать 30 секунд</string>
+  <string name="cast_forward_30s">Вперед 30 сек</string>
+  <string name="cast_volume">Объем</string>
+  <string name="cast_end_session">Завершение сеанса</string>
 </resources>
