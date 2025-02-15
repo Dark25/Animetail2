@@ -258,6 +258,9 @@
     <string name="clear_queue_confirmation">Clear Queue</string>
     <string name="clear_queue_confirmation_message">Are you sure you want to clear the entire queue?</string>
     <string name="action_end_session">End Cast Session</string>
+    <string name="cast_end_session_message">Are you sure you want to end the current cast session?</string>
+    <string name="cast_end_session_confirm">End Session</string>
+    <string name="cast_end_session_cancel">Cancel</string>
     <!-- Cast device picker -->
    <string name="cast_available_devices">Available Devices</string>
     <string name="cast_media_info">Media Info</string>

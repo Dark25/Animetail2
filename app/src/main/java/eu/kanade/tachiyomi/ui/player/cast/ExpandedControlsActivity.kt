@@ -1,11 +1,32 @@
 package eu.kanade.tachiyomi.ui.player.cast
 
+import android.os.Bundle
 import android.view.Menu
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import com.google.android.gms.cast.framework.CastButtonFactory
-import com.google.android.gms.cast.framework.media.widget.ExpandedControllerActivity
+import com.google.android.gms.cast.framework.CastContext
+import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.player.cast.components.ExpandedControllerScreen
 
-class ExpandedControlsActivity : ExpandedControllerActivity() {
+class ExpandedControlsActivity : ComponentActivity() {
+
+    private val castContext by lazy { CastContext.getSharedInstance(this) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            TachiyomiTheme {
+                ExpandedControllerScreen(
+                    castContext = castContext,
+                    onBackPressed = { finish() },
+                )
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.expanded_controller, menu)
