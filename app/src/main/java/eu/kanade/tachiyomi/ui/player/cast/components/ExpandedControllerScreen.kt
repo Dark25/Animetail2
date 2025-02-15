@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.player.cast.components
 import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,10 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material.icons.filled.CastConnected
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Forward30
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
@@ -65,6 +69,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import coil3.compose.AsyncImage
 import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.MediaStatus
+import com.google.android.gms.cast.MediaTrack
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.media.RemoteMediaClient
 import kotlinx.coroutines.delay
@@ -430,120 +435,7 @@ fun ExpandedControllerScreen(
                             )
                         }
 
-                        Box {
-                            var showVolumeSlider by remember { mutableStateOf(false) }
-                            FilledTonalIconButton(
-                                onClick = { showVolumeSlider = !showVolumeSlider },
-                                colors = IconButtonDefaults.filledTonalIconButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                ),
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.VolumeUp,
-                                    contentDescription = stringResource(TLMR.strings.cast_volume),
-                                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                                )
-                            }
-
-                            if (showVolumeSlider) {
-                                Popup(
-                                    onDismissRequest = { showVolumeSlider = false },
-                                    alignment = Alignment.TopCenter,
-                                    offset = IntOffset(0, -170),
-                                ) {
-                                    Surface(
-                                        modifier = Modifier
-                                            .width(48.dp)
-                                            .height(180.dp),
-                                        shape = MaterialTheme.shapes.extraSmall,
-                                        tonalElevation = 2.dp,
-                                        shadowElevation = 4.dp,
-                                    ) {
-                                        Column(
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .padding(vertical = 12.dp),
-                                            horizontalAlignment = Alignment.CenterHorizontally,
-                                            verticalArrangement = Arrangement.SpaceBetween,
-                                        ) {
-                                            var volume by remember {
-                                                mutableFloatStateOf(
-                                                    castContext.sessionManager.currentCastSession?.volume?.toFloat()
-                                                        ?: 1f,
-                                                )
-                                            }
-
-                                            Text(
-                                                text = "${(volume * 100).toInt()}%",
-                                                style = MaterialTheme.typography.labelSmall,
-                                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                                            )
-
-                                            Box(
-                                                modifier = Modifier
-                                                    .weight(1f)
-                                                    .padding(vertical = 8.dp),
-                                                contentAlignment = Alignment.Center,
-                                            ) {
-                                                Slider(
-                                                    value = volume,
-                                                    onValueChange = { newVolume ->
-                                                        volume = newVolume
-                                                        castContext.sessionManager.currentCastSession?.volume =
-                                                            newVolume.toDouble()
-                                                    },
-                                                    valueRange = 0f..1f,
-                                                    modifier = Modifier
-                                                        .graphicsLayer {
-                                                            rotationZ = 270f //
-                                                        }
-                                                        .fillMaxWidth(),
-                                                    colors = SliderDefaults.colors(
-                                                        thumbColor = MaterialTheme.colorScheme.primary,
-                                                        activeTrackColor = MaterialTheme.colorScheme.primary,
-                                                        inactiveTrackColor = MaterialTheme.colorScheme.onSurface.copy(
-                                                            alpha = 0.32f,
-                                                        ),
-                                                    ),
-                                                    thumb = {
-                                                        Box(
-                                                            modifier = Modifier
-                                                                .size(16.dp)
-                                                                .background(
-                                                                    color = MaterialTheme.colorScheme.primary,
-                                                                    shape = MaterialTheme.shapes.small,
-                                                                ),
-                                                        )
-                                                    },
-                                                    track = {
-                                                        SliderDefaults.Track(
-                                                            modifier = Modifier.height(4.dp),
-                                                            sliderState = it,
-                                                            colors = SliderDefaults.colors(
-                                                                activeTrackColor = MaterialTheme.colorScheme.primary,
-                                                                inactiveTrackColor = MaterialTheme.colorScheme
-                                                                    .onSurface.copy(alpha = 0.32f),
-                                                            ),
-                                                        )
-                                                    },
-                                                )
-                                            }
-
-                                            Icon(
-                                                imageVector = when {
-                                                    volume == 0f -> Icons.Default.VolumeOff
-                                                    volume < 0.5f -> Icons.Default.VolumeDown
-                                                    else -> Icons.Default.VolumeUp
-                                                },
-                                                contentDescription = null,
-                                                modifier = Modifier.size(16.dp),
-                                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        VolumeControl(castContext = castContext)
                     }
                 }
             }
@@ -571,6 +463,264 @@ fun ExpandedControllerScreen(
                 }
             },
         )
+    }
+
+    if (showTracksDialog) {
+        TracksSelectionDialog(
+            client = client,
+            onDismiss = { showTracksDialog = false },
+        )
+    }
+}
+
+@Composable
+private fun VolumeControl(
+    castContext: CastContext,
+    modifier: Modifier = Modifier,
+) {
+    var showVolumeSlider by remember { mutableStateOf(false) }
+    var volume by remember {
+        mutableFloatStateOf(
+            castContext.sessionManager.currentCastSession?.volume?.toFloat() ?: 1f,
+        )
+    }
+
+    Box(modifier = modifier) {
+        // Anchor point para el popup
+        Box(
+            modifier = Modifier.align(Alignment.Center),
+        ) {
+            FilledTonalIconButton(
+                onClick = { showVolumeSlider = !showVolumeSlider },
+                colors = IconButtonDefaults.filledTonalIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                ),
+            ) {
+                Icon(
+                    imageVector = when {
+                        volume == 0f -> Icons.Default.VolumeOff
+                        volume < 0.5f -> Icons.Default.VolumeDown
+                        else -> Icons.Default.VolumeUp
+                    },
+                    contentDescription = stringResource(TLMR.strings.cast_volume),
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                )
+            }
+
+            if (showVolumeSlider) {
+                Popup(
+                    onDismissRequest = { showVolumeSlider = false },
+                    offset = IntOffset(0, -100),
+                ) {
+                    Surface(
+                        modifier = Modifier
+                            .width(280.dp)
+                            .height(64.dp),
+                        shape = MaterialTheme.shapes.medium,
+                        tonalElevation = 3.dp,
+                        shadowElevation = 6.dp,
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    val newVolume = (volume - 0.1f).coerceIn(0f, 1f)
+                                    volume = newVolume
+                                    castContext.sessionManager.currentCastSession?.volume = newVolume.toDouble()
+                                },
+                                modifier = Modifier.size(32.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.VolumeDown,
+                                    contentDescription = "Decrease volume",
+                                    modifier = Modifier.size(20.dp),
+                                )
+                            }
+
+                            Box(
+                                modifier = Modifier.weight(1f),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Slider(
+                                    value = volume,
+                                    onValueChange = { newVolume ->
+                                        volume = newVolume
+                                        castContext.sessionManager.currentCastSession?.volume = newVolume.toDouble()
+                                    },
+                                    valueRange = 0f..1f,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = SliderDefaults.colors(
+                                        thumbColor = MaterialTheme.colorScheme.primary,
+                                        activeTrackColor = MaterialTheme.colorScheme.primary,
+                                        inactiveTrackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.32f),
+                                    ),
+                                )
+                            }
+
+                            IconButton(
+                                onClick = {
+                                    val newVolume = (volume + 0.1f).coerceIn(0f, 1f)
+                                    volume = newVolume
+                                    castContext.sessionManager.currentCastSession?.volume = newVolume.toDouble()
+                                },
+                                modifier = Modifier.size(32.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.VolumeUp,
+                                    contentDescription = "Increase volume",
+                                    modifier = Modifier.size(20.dp),
+                                )
+                            }
+
+                            Text(
+                                text = "${(volume * 100).toInt()}%",
+                                style = MaterialTheme.typography.labelMedium,
+                                modifier = Modifier.width(48.dp),
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TracksSelectionDialog(
+    client: RemoteMediaClient?,
+    onDismiss: () -> Unit,
+) {
+    val tracks = remember(client) {
+        client?.mediaStatus?.mediaInfo?.mediaTracks?.toList() ?: emptyList()
+    }
+    var activeTrackIds by remember(client) {
+        mutableStateOf(client?.mediaStatus?.activeTrackIds?.toSet() ?: emptySet())
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Tracks") },
+        text = {
+            LazyColumn {
+                val subtitleTracks = tracks.filter { it.type == MediaTrack.TYPE_TEXT }
+                val audioTracks = tracks.filter { it.type == MediaTrack.TYPE_AUDIO }
+
+                if (subtitleTracks.isNotEmpty()) {
+                    item {
+                        Text(
+                            text = "Subtitles",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.padding(vertical = 8.dp),
+                        )
+                        // Opción para desactivar todos los subtítulos
+                        TrackItem(
+                            track = null,
+                            name = "None",
+                            isSelected = !activeTrackIds.any { id -> 
+                                tracks.find { it.id == id }?.type == MediaTrack.TYPE_TEXT 
+                            },
+                            onSelected = { selected ->
+                                if (selected) {
+                                    // Remover todos los subtítulos activos
+                                    activeTrackIds = activeTrackIds.filter { id ->
+                                        tracks.find { it.id == id }?.type != MediaTrack.TYPE_TEXT
+                                    }.toSet()
+                                    client?.setActiveMediaTracks(activeTrackIds.toLongArray())
+                                }
+                            },
+                        )
+                    }
+                    items(subtitleTracks) { track ->
+                        TrackItem(
+                            track = track,
+                            name = track.name ?: "Unknown",
+                            isSelected = track.id in activeTrackIds,
+                            onSelected = { selected ->
+                                val newTrackIds = if (selected) {
+                                    activeTrackIds.plus(track.id)
+                                } else {
+                                    activeTrackIds.minus(track.id)
+                                }
+                                activeTrackIds = newTrackIds
+                                client?.setActiveMediaTracks(newTrackIds.toLongArray())
+                            },
+                        )
+                    }
+                }
+
+                if (audioTracks.isNotEmpty()) {
+                    item {
+                        Text(
+                            text = "Audio",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.padding(vertical = 8.dp),
+                        )
+                    }
+                    items(audioTracks) { track ->
+                        TrackItem(
+                            track = track,
+                            name = track.name ?: "Unknown",
+                            isSelected = track.id in activeTrackIds,
+                            onSelected = { selected ->
+                                if (selected) {
+                                    // Desactivar otras pistas de audio
+                                    val otherAudioTracks = audioTracks.filter { it.id != track.id }
+                                    val newTrackIds = activeTrackIds
+                                        .minus(otherAudioTracks.map { it.id })
+                                        .plus(track.id)
+                                    activeTrackIds = newTrackIds
+                                    client?.setActiveMediaTracks(newTrackIds.toLongArray())
+                                }
+                            },
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Close")
+            }
+        },
+    )
+}
+
+@Composable
+private fun TrackItem(
+    track: MediaTrack?,
+    name: String,
+    isSelected: Boolean,
+    onSelected: (Boolean) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onSelected(!isSelected) }
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = name,
+            style = MaterialTheme.typography.bodyMedium,
+            color = if (isSelected) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            },
+        )
+        if (isSelected) {
+            Icon(
+                imageVector = Icons.Default.Check,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        }
     }
 }
 
