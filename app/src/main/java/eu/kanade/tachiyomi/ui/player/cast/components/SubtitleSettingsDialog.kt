@@ -335,7 +335,6 @@ private val SubtitleColorOptions = listOf(
 )
 
 private val BackgroundColorOptions = listOf(
-    Color.Black.copy(alpha = 0.0f),
     Color.Black.copy(alpha = 0.1f),
     Color.Black.copy(alpha = 0.25f),
     Color.Black.copy(alpha = 0.5f),
