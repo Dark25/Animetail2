@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Forward30
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Replay30
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material.icons.filled.Subtitles
@@ -72,6 +73,7 @@ import com.google.android.gms.cast.MediaStatus
 import com.google.android.gms.cast.MediaTrack
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.media.RemoteMediaClient
+import eu.kanade.tachiyomi.ui.player.CastManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import logcat.LogPriority
@@ -83,6 +85,7 @@ import java.util.concurrent.TimeUnit
 @SuppressLint("DefaultLocale")
 @Composable
 fun ExpandedControllerScreen(
+    castManager: CastManager,
     castContext: CastContext,
     onBackPressed: () -> Unit,
 ) {
@@ -98,6 +101,8 @@ fun ExpandedControllerScreen(
     var subtitle by remember { mutableStateOf("") }
     var showTracksDialog by remember { mutableStateOf(false) }
     var showDisconnectDialog by remember { mutableStateOf(false) }
+    var showSubtitleSettings by remember { mutableStateOf(false) }
+    var subtitleSettings by remember { mutableStateOf(SubtitleSettings()) }
 
     val mediaCallback = remember {
         object : RemoteMediaClient.Callback() {
@@ -184,6 +189,15 @@ fun ExpandedControllerScreen(
                     }
                 },
                 actions = {
+                    IconButton(
+                        onClick = { showSubtitleSettings = true },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = stringResource(TLMR.strings.cast_subtitle_settings),
+                            tint = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
                     IconButton(
                         onClick = { showDisconnectDialog = true },
                         modifier = Modifier.animateContentSize(),
@@ -430,7 +444,7 @@ fun ExpandedControllerScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Subtitles,
-                                contentDescription = "Subtitles/Audio",
+                                contentDescription = stringResource(TLMR.strings.cast_tracks),
                                 tint = MaterialTheme.colorScheme.onSecondaryContainer,
                             )
                         }
@@ -471,6 +485,17 @@ fun ExpandedControllerScreen(
             onDismiss = { showTracksDialog = false },
         )
     }
+
+    if (showSubtitleSettings) {
+        SubtitleSettingsDialog(
+            onDismissRequest = { showSubtitleSettings = false },
+            initialSettings = castManager.getDefaultSubtitleSettings(),
+            onSettingsChanged = { newSettings ->
+                subtitleSettings = newSettings
+                castManager.applySubtitleSettings(newSettings)
+            },
+        )
+    }
 }
 
 @Composable
@@ -486,7 +511,6 @@ private fun VolumeControl(
     }
 
     Box(modifier = modifier) {
-        // Anchor point para el popup
         Box(
             modifier = Modifier.align(Alignment.Center),
         ) {
@@ -537,7 +561,7 @@ private fun VolumeControl(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.VolumeDown,
-                                    contentDescription = "Decrease volume",
+                                    contentDescription = stringResource(TLMR.strings.cast_volume_down),
                                     modifier = Modifier.size(20.dp),
                                 )
                             }
@@ -572,7 +596,7 @@ private fun VolumeControl(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.VolumeUp,
-                                    contentDescription = "Increase volume",
+                                    contentDescription = stringResource(TLMR.strings.cast_volume_up),
                                     modifier = Modifier.size(20.dp),
                                 )
                             }
@@ -604,7 +628,7 @@ private fun TracksSelectionDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Tracks") },
+        title = { Text(stringResource(TLMR.strings.cast_tracks)) },
         text = {
             LazyColumn {
                 val subtitleTracks = tracks.filter { it.type == MediaTrack.TYPE_TEXT }
@@ -613,20 +637,18 @@ private fun TracksSelectionDialog(
                 if (subtitleTracks.isNotEmpty()) {
                     item {
                         Text(
-                            text = "Subtitles",
+                            text = stringResource(TLMR.strings.cast_subtitles),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(vertical = 8.dp),
                         )
-                        // Opción para desactivar todos los subtítulos
                         TrackItem(
                             track = null,
-                            name = "None",
-                            isSelected = !activeTrackIds.any { id -> 
-                                tracks.find { it.id == id }?.type == MediaTrack.TYPE_TEXT 
+                            name = stringResource(TLMR.strings.cast_no_subtitles),
+                            isSelected = !activeTrackIds.any { id ->
+                                tracks.find { it.id == id }?.type == MediaTrack.TYPE_TEXT
                             },
                             onSelected = { selected ->
                                 if (selected) {
-                                    // Remover todos los subtítulos activos
                                     activeTrackIds = activeTrackIds.filter { id ->
                                         tracks.find { it.id == id }?.type != MediaTrack.TYPE_TEXT
                                     }.toSet()
@@ -656,7 +678,7 @@ private fun TracksSelectionDialog(
                 if (audioTracks.isNotEmpty()) {
                     item {
                         Text(
-                            text = "Audio",
+                            text = stringResource(TLMR.strings.cast_audio_tracks),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(vertical = 8.dp),
                         )
@@ -668,10 +690,9 @@ private fun TracksSelectionDialog(
                             isSelected = track.id in activeTrackIds,
                             onSelected = { selected ->
                                 if (selected) {
-                                    // Desactivar otras pistas de audio
                                     val otherAudioTracks = audioTracks.filter { it.id != track.id }
                                     val newTrackIds = activeTrackIds
-                                        .minus(otherAudioTracks.map { it.id })
+                                        .minus(otherAudioTracks.map { it.id }.toSet())
                                         .plus(track.id)
                                     activeTrackIds = newTrackIds
                                     client?.setActiveMediaTracks(newTrackIds.toLongArray())
@@ -684,7 +705,7 @@ private fun TracksSelectionDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("Close")
+                Text(stringResource(TLMR.strings.cast_close))
             }
         },
     )
