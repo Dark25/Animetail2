@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.FormatColorFill
 import androidx.compose.material.icons.filled.FormatSize
 import androidx.compose.material.icons.filled.Opacity
 import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.TextFormat
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -58,6 +59,7 @@ fun SubtitleSettingsDialog(
     var textColor by remember { mutableStateOf(initialSettings.textColor) }
     var backgroundColor by remember { mutableStateOf(initialSettings.backgroundColor) }
     var shadowRadius by remember { mutableFloatStateOf(initialSettings.shadowRadius.value) }
+    var fontFamily by remember { mutableStateOf(initialSettings.fontFamily) }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -177,7 +179,19 @@ fun SubtitleSettingsDialog(
                     }
                 }
 
-                // Preview Section mejorado
+                // Font Family Section
+                SettingSection(
+                    title = stringResource(TLMR.strings.cast_subtitle_font_family),
+                    icon = Icons.Default.TextFormat,
+                ) {
+                    FontFamilySelector(
+                        selectedFamily = fontFamily,
+                        onFamilySelected = { newFamily ->
+                            fontFamily = newFamily
+                        },
+                    )
+                }
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -199,6 +213,7 @@ fun SubtitleSettingsDialog(
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontSize = fontSize.sp,
                             color = textColor,
+                            fontFamily = fontFamily,
                             shadow = when {
                                 shadowRadius <= 0 -> null
                                 shadowRadius <= 3 -> Shadow(
@@ -244,6 +259,7 @@ fun SubtitleSettingsDialog(
                             textColor = Color.White,
                             backgroundColor = Color.Transparent,
                             shadowRadius = 2.dp,
+                            fontFamily = FontFamily.Default,
                         )
                         onSettingsChanged(defaultSettings)
                         onDismissRequest()
@@ -258,6 +274,7 @@ fun SubtitleSettingsDialog(
                             textColor = textColor,
                             backgroundColor = backgroundColor,
                             shadowRadius = shadowRadius.dp,
+                            fontFamily = fontFamily,
                         )
                         onSettingsChanged(newSettings)
                         onDismissRequest()
@@ -318,11 +335,19 @@ private val SubtitleColorOptions = listOf(
 )
 
 private val BackgroundColorOptions = listOf(
+    Color.Black.copy(alpha = 0.0f),
     Color.Black.copy(alpha = 0.1f),
     Color.Black.copy(alpha = 0.25f),
     Color.Black.copy(alpha = 0.5f),
-    Color.Black.copy(alpha = 0.75f),
     Color.Black,
+)
+
+private val FontFamilyOptions = listOf(
+    "Default" to FontFamily.Default,
+    "Monospace" to FontFamily.Monospace,
+    "Serif" to FontFamily.Serif,
+    "SansSerif" to FontFamily.SansSerif,
+    "Cursive" to FontFamily.Cursive,
 )
 
 @Composable
@@ -365,6 +390,47 @@ private fun ColorButton(
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun FontFamilySelector(
+    selectedFamily: FontFamily,
+    onFamilySelected: (FontFamily) -> Unit,
+) {
+    Column {
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            maxItemsInEachRow = 2,
+        ) {
+            FontFamilyOptions.forEach { (name, family) ->
+                Surface(
+                    onClick = { onFamilySelected(family) },
+                    shape = MaterialTheme.shapes.small,
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = if (selectedFamily == family) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+                        },
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(2.dp),
+                ) {
+                    Text(
+                        text = name,
+                        fontFamily = family,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    )
+                }
             }
         }
     }

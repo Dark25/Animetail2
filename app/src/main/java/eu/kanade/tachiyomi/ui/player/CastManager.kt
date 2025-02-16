@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
@@ -577,9 +578,24 @@ class CastManager(
                             edgeType = TextTrackStyle.EDGE_TYPE_NONE
                         }
 
-                        setFontFamily("SANS_SERIF")
+                        // Aplicar la familia de fuente seleccionada
+                        when (settings.fontFamily) {
+                            FontFamily.Default -> setFontFamily("SANS_SERIF")
+                            FontFamily.SansSerif -> setFontFamily("SANS_SERIF")
+                            FontFamily.Serif -> setFontFamily("SERIF")
+                            FontFamily.Monospace -> setFontFamily("MONOSPACE")
+                            FontFamily.Cursive -> setFontFamily("CURSIVE")
+                            else -> setFontFamily("SANS_SERIF")
+                        }
+
                         fontStyle = TextTrackStyle.FONT_STYLE_NORMAL
-                        fontGenericFamily = TextTrackStyle.FONT_FAMILY_SANS_SERIF
+                        fontGenericFamily = when (settings.fontFamily) {
+                            FontFamily.SansSerif -> TextTrackStyle.FONT_FAMILY_SANS_SERIF
+                            FontFamily.Serif -> TextTrackStyle.FONT_FAMILY_SERIF
+                            FontFamily.Monospace -> TextTrackStyle.FONT_FAMILY_MONOSPACED_SANS_SERIF
+                            FontFamily.Cursive -> TextTrackStyle.FONT_FAMILY_CURSIVE
+                            else -> TextTrackStyle.FONT_FAMILY_SANS_SERIF
+                        }
                     }
 
                     val wasPlaying = client.isPlaying
@@ -609,6 +625,7 @@ class CastManager(
             textColor = Color(subtitlePreferences.textColor().get()),
             backgroundColor = Color(subtitlePreferences.backgroundColor().get()),
             shadowRadius = subtitlePreferences.shadowRadius().get().dp,
+            fontFamily = subtitlePreferences.getFontFamily(),
         )
     }
 }

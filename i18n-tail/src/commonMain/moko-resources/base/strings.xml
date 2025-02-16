@@ -294,4 +294,5 @@
     <string name="cast_audio_tracks">Audio Tracks</string>
     <string name="cast_no_subtitles">No Subtitles</string>
     <string name="cast_close">Close</string>
+    <string name="cast_subtitle_font_family">Font Family</string>
 </resources>
