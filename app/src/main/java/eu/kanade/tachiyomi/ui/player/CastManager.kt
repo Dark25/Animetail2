@@ -561,11 +561,7 @@ class CastManager(
                     val textTrackStyle = TextTrackStyle().apply {
                         fontScale = settings.fontSize.value / 20f
                         foregroundColor = settings.textColor.toArgb()
-                        backgroundColor = if (settings.backgroundColor == Color.Transparent) {
-                            android.graphics.Color.TRANSPARENT
-                        } else {
-                            settings.backgroundColor.toArgb()
-                        }
+                        backgroundColor = settings.backgroundColor.toArgb()
                         windowColor = android.graphics.Color.TRANSPARENT
                         if (settings.shadowRadius.value > 0) {
                             edgeColor = android.graphics.Color.BLACK

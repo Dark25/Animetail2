@@ -335,10 +335,11 @@ private val SubtitleColorOptions = listOf(
 )
 
 private val BackgroundColorOptions = listOf(
-    Color.Black.copy(alpha = 0.1f),
-    Color.Black.copy(alpha = 0.25f),
-    Color.Black.copy(alpha = 0.5f),
-    Color.Black,
+    Color(0x03000000), // 1% opacity black
+    Color(0x19000000), // 10% opacity black
+    Color(0x40000000), // 25% opacity black
+    Color(0x80000000), // 50% opacity black
+    Color(0xFF000000), // 100% opacity black
 )
 
 private val FontFamilyOptions = listOf(
