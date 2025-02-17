@@ -18,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FormatColorFill
 import androidx.compose.material.icons.filled.FormatSize
+import androidx.compose.material.icons.filled.LineStyle
 import androidx.compose.material.icons.filled.Opacity
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.TextFormat
@@ -60,6 +61,7 @@ fun SubtitleSettingsDialog(
     var backgroundColor by remember { mutableStateOf(initialSettings.backgroundColor) }
     var shadowRadius by remember { mutableFloatStateOf(initialSettings.shadowRadius.value) }
     var fontFamily by remember { mutableStateOf(initialSettings.fontFamily) }
+    var borderStyle by remember { mutableStateOf(initialSettings.borderStyle) }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -192,6 +194,17 @@ fun SubtitleSettingsDialog(
                     )
                 }
 
+                // Border Style Section
+                SettingSection(
+                    title = stringResource(TLMR.strings.cast_subtitle_border_style),
+                    icon = Icons.Default.LineStyle,
+                ) {
+                    BorderStyleSelector(
+                        selectedStyle = borderStyle,
+                        onStyleSelected = { borderStyle = it },
+                    )
+                }
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -260,6 +273,7 @@ fun SubtitleSettingsDialog(
                             backgroundColor = Color.Transparent,
                             shadowRadius = 2.dp,
                             fontFamily = FontFamily.Default,
+                            borderStyle = BorderStyle.NONE,
                         )
                         onSettingsChanged(defaultSettings)
                         onDismissRequest()
@@ -275,6 +289,7 @@ fun SubtitleSettingsDialog(
                             backgroundColor = backgroundColor,
                             shadowRadius = shadowRadius.dp,
                             fontFamily = fontFamily,
+                            borderStyle = borderStyle,
                         )
                         onSettingsChanged(newSettings)
                         onDismissRequest()
@@ -384,7 +399,7 @@ private fun ColorButton(
                 ),
             contentAlignment = Alignment.Center,
         ) {
-            if (color == Color.Transparent) {
+            if (color == Color(0x03000000)) {
                 Text(
                     "T",
                     style = MaterialTheme.typography.labelMedium,
@@ -436,6 +451,58 @@ private fun FontFamilySelector(
     }
 }
 
+@Composable
+private fun BorderStyleSelector(
+    selectedStyle: BorderStyle,
+    onStyleSelected: (BorderStyle) -> Unit,
+) {
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        maxItemsInEachRow = 3,
+    ) {
+        BorderStyle.values().forEach { style ->
+            Surface(
+                onClick = { onStyleSelected(style) },
+                shape = MaterialTheme.shapes.small,
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = if (selectedStyle == style) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+                    },
+                ),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(2.dp),
+            ) {
+                Text(
+                    text = when (style) {
+                        BorderStyle.NONE -> stringResource(TLMR.strings.cast_subtitle_border_none)
+                        BorderStyle.OUTLINE -> stringResource(TLMR.strings.cast_subtitle_border_outline)
+                        BorderStyle.DROP_SHADOW -> stringResource(TLMR.strings.cast_subtitle_border_drop_shadow)
+                        BorderStyle.RAISED -> stringResource(TLMR.strings.cast_subtitle_border_raised)
+                        BorderStyle.DEPRESSED -> stringResource(TLMR.strings.cast_subtitle_border_depressed)
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                )
+            }
+        }
+    }
+}
+
+enum class BorderStyle {
+    NONE,
+    OUTLINE,
+    DROP_SHADOW,
+    RAISED,
+    DEPRESSED,
+}
+
 data class SubtitleSettings(
     val fontSize: androidx.compose.ui.unit.TextUnit = 20.sp,
     val textColor: Color = Color.White,
@@ -444,4 +511,5 @@ data class SubtitleSettings(
     val fontStyle: FontStyle = FontStyle.Normal,
     val shadowRadius: androidx.compose.ui.unit.Dp = 2.dp,
     val backgroundColor: Color = Color.Transparent,
+    val borderStyle: BorderStyle = BorderStyle.NONE,
 )

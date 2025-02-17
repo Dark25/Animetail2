@@ -22,6 +22,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import eu.kanade.tachiyomi.ui.player.cast.CastMediaBuilder
 import eu.kanade.tachiyomi.ui.player.cast.CastSessionListener
+import eu.kanade.tachiyomi.ui.player.cast.components.BorderStyle
 import eu.kanade.tachiyomi.ui.player.cast.components.SubtitleSettings
 import eu.kanade.tachiyomi.ui.player.settings.CastSubtitlePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -592,6 +593,15 @@ class CastManager(
                             FontFamily.Cursive -> TextTrackStyle.FONT_FAMILY_CURSIVE
                             else -> TextTrackStyle.FONT_FAMILY_SANS_SERIF
                         }
+
+                        // Aplicar estilo de borde
+                        edgeType = when (settings.borderStyle) {
+                            BorderStyle.NONE -> TextTrackStyle.EDGE_TYPE_NONE
+                            BorderStyle.OUTLINE -> TextTrackStyle.EDGE_TYPE_OUTLINE
+                            BorderStyle.DROP_SHADOW -> TextTrackStyle.EDGE_TYPE_DROP_SHADOW
+                            BorderStyle.RAISED -> TextTrackStyle.EDGE_TYPE_RAISED
+                            BorderStyle.DEPRESSED -> TextTrackStyle.EDGE_TYPE_DEPRESSED
+                        }
                     }
 
                     val wasPlaying = client.isPlaying
@@ -622,6 +632,7 @@ class CastManager(
             backgroundColor = Color(subtitlePreferences.backgroundColor().get()),
             shadowRadius = subtitlePreferences.shadowRadius().get().dp,
             fontFamily = subtitlePreferences.getFontFamily(),
+            borderStyle = subtitlePreferences.getBorderStyle(),
         )
     }
 }

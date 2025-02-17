@@ -295,4 +295,11 @@
     <string name="cast_no_subtitles">No Subtitles</string>
     <string name="cast_close">Close</string>
     <string name="cast_subtitle_font_family">Font Family</string>
+    <string name="cast_subtitle_border_style">Border Style</string>
+    <string name="cast_subtitle_border_none">None</string>
+    <string name="cast_subtitle_border_outline">Outline</string>
+    <string name="cast_subtitle_border_drop_shadow">Drop Shadow</string>
+    <string name="cast_subtitle_border_drop_shadow_soft">Soft Drop Shadow</string>
+    <string name="cast_subtitle_border_raised">Raised</string>
+    <string name="cast_subtitle_border_depressed">Depressed</string>
 </resources>

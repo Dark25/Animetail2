@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.player.settings
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontFamily
+import eu.kanade.tachiyomi.ui.player.cast.components.BorderStyle
 import eu.kanade.tachiyomi.ui.player.cast.components.SubtitleSettings
 import logcat.LogPriority
 import tachiyomi.core.common.preference.PreferenceStore
@@ -16,6 +17,7 @@ class CastSubtitlePreferences(
     fun backgroundColor() = preferenceStore.getInt("pref_cast_subtitle_background", Color.Transparent.toArgb())
     fun shadowRadius() = preferenceStore.getFloat("pref_cast_subtitle_shadow", 2f)
     private fun fontFamily() = preferenceStore.getString("pref_cast_subtitle_font_family", "SANS_SERIF")
+    fun borderStyle() = preferenceStore.getString("pref_cast_subtitle_border_style", "NONE")
 
     private fun fontFamilyToString(fontFamily: FontFamily): String {
         return when (fontFamily) {
@@ -46,6 +48,8 @@ class CastSubtitlePreferences(
             preferenceStore.getFloat("pref_cast_subtitle_shadow", 2f).set(settings.shadowRadius.value)
             preferenceStore.getString("pref_cast_subtitle_font_family", "SANS_SERIF")
                 .set(fontFamilyToString(settings.fontFamily))
+            preferenceStore.getString("pref_cast_subtitle_border_style", "NONE")
+                .set(settings.borderStyle.name)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR) { "Error saving subtitle settings: ${e.message}" }
         }
@@ -54,5 +58,13 @@ class CastSubtitlePreferences(
     // Método para obtener la fuente guardada
     fun getFontFamily(): FontFamily {
         return stringToFontFamily(fontFamily().get())
+    }
+
+    fun getBorderStyle(): BorderStyle {
+        return try {
+            BorderStyle.valueOf(borderStyle().get())
+        } catch (e: Exception) {
+            BorderStyle.NONE
+        }
     }
 }
